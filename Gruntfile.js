@@ -1,11 +1,7 @@
 'use strict';
 
-//Plugin Name
-var pluginName = 'jquery.ft.basictab',
-	css = './' + pluginName + '.css',
-	minCss = './' + pluginName + '.min.css',
-	js = './' + pluginName + '.js',
-	minJs = './' + pluginName + '.min.js';
+var js = 'script.js',
+minJs = 'script.min.js';
 
 module.exports = function(grunt) {
 
@@ -25,8 +21,8 @@ module.exports = function(grunt) {
 	  },
 	  cssmin: {
 		  style: {
-		  	src: css,
-	  		dest: minCss
+		  	src: './style.css',
+	  		dest: './style.min.css'
 		  }
 	  },
 	  compass: {
@@ -54,7 +50,7 @@ module.exports = function(grunt) {
 	  uglify: {
 		  my_target: {
 			  files: {
-				  'jquery.ft.basictab.min.js': [js]
+				  'script.min.js': [js]
 			  }
 		  }
 	  },
