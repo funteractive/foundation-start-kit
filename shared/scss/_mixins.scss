@@ -1,0 +1,105 @@
+@charset "utf-8";
+/* =============================================== */
+/** extend */
+/* ----------------------------------------------- */
+// Column
+%baseColumn{
+  width:$baseWidth;
+  margin:0 auto;
+}
+// Clearfix
+%group{
+  @if $legacy-support-for-ie6 or $legacy-support-for-ie7 {
+    *zoom: 1;
+  }
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+    font-size:0;
+  }
+}
+//***********************
+// Sprite(PC Only)
+// @param $name
+// @param $hover
+// @param $center
+//***********************
+%ir-pc{
+  display: block;
+  background-image: $sprite-img;
+  overflow: hidden;
+  height: 0;
+  background-repeat: no-repeat;
+}
+@mixin sprite-ir($name, $hover:false, $center:false ) {
+  @extend %ir-pc;
+  @if $center{
+    margin-left:auto;
+    margin-right:auto;
+  }
+  width: round(image-width(sprite-file($sprite, $name)));
+  padding-top:round(image-height(sprite-file($sprite, $name)));
+  $xpos :round(nth(sprite-position($sprite, $name), 1));
+  $ypos :round(nth(sprite-position($sprite, $name), 2));
+  background-position:$xpos $ypos;
+  @if $hover{
+    &:hover, &.active{
+      $hoverXpos :round(nth(sprite-position($sprite, #{$name}_on), 1));
+      $hoverYpos :round(nth(sprite-position($sprite, #{$name}_on), 2));
+      background-position: $hoverXpos $hoverYpos;
+    }
+  }
+}
+//***********************
+// Sprite list(PC Only)
+// @param $name
+// @param $hover
+// @param $center
+//***********************
+%list-pc{
+  background-image: $sprite-img;
+  background-repeat:no-repeat;
+}
+@mixin sprite-list($name,$position:false){
+  @extend %list-pc;
+  $pos:false;
+  $xpos :round(nth(sprite-position($sprite, $name), 1));
+  $ypos :round(nth(sprite-position($sprite, $name), 2));
+  @if $position{
+    $pos : $ypos + $position;
+  }@else{
+    $pos : $ypos;
+  }
+  background-position:$xpos $pos;
+}
+
+//***********************
+// Inline list
+// @param $left
+// @param $right
+//***********************
+%inlineList{
+  ul,li{
+    display: inline;
+  }
+}
+@mixin inline-list($left:false,$right:false){
+  @extend %inlineList;
+  li{
+    @if $left{
+      margin-left: $left;
+      &:first-child{
+        margin-left: 0px;
+      }
+    }
+    @if $right{
+      margin-right: $right;
+      &:last-child{
+        margin-left: 0px;
+      }
+    }
+  }
+}

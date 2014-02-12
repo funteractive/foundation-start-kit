@@ -1,0 +1,13 @@
+{
+  "name": "avenir",
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-bower-task": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-compass": "latest",
+    "grunt-autoprefixer": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest"
+  }
+}

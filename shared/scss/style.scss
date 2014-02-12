@@ -1,0 +1,25 @@
+/*
+Theme Name: Funteractive Startup Theme with Foundation
+Theme URI: 
+Description: のテーマです。
+Version: 1.0
+*/
+@import "setting";
+@import "default";
+@import "mixins";
+@import "functions";
+/* ========================================
+ * foundation
+======================================== */
+@import "foundation_scss/foundation/settings";
+@import "foundation_scss/foundation";
+
+/* ========================================
+ * layout
+======================================== */
+@import "layout/*";
+
+/* ========================================
+ * module
+======================================== */
+@import "module/*";
