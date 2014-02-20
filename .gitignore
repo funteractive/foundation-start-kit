@@ -1,5 +1,5 @@
 node_modules/
-.sass_cache/
+.sass-cache/
 *.swp
 *.log
 .DS_Store
