@@ -40,8 +40,8 @@ module.exports = function(grunt) {
 			  options: {
 				  map: true
 			  },
-			  src: css,
-			  dest: minCss
+			  src: './style.min.css',
+			  dest: './style.min.css'
 		  }
 	  },
 	  jshint: {

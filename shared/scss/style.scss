@@ -11,8 +11,8 @@ Version: 1.0
 /* ========================================
  * foundation
 ======================================== */
-@import "foundation_scss/foundation/settings";
-@import "foundation_scss/foundation";
+@import "foundation/functions";
+@import "foundation";
 
 /* ========================================
  * layout
