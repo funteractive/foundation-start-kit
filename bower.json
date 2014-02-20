@@ -1,5 +1,5 @@
 {
-	"name": "avenir",
+	"name": "start",
 	"dependencies": {
 		"jquery": "latest",
 		"foundation": "zurb/bower-foundation"

@@ -54,6 +54,12 @@ module.exports = function(grunt) {
 			  }
 		  }
 	  },
+	  kss: {
+		  options: {
+			  includeType: 'sass',
+			  includePath: 'shared/scss/*.scss',
+		  }
+	  },
 	  watch: {
 	  	css: {
 			files: 'shared/scss/*.scss',
@@ -74,8 +80,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-kss');
 
   grunt.registerTask('default', [ 'watch' ]);
+  grunt.registerTask('dist', [ 'compass', 'cssmin', 'autoprefixer', 'jshint', 'uglify', 'kss' ]);
   grunt.registerTask('build', [ 'bower:install' ]);
 
 };

@@ -1,5 +1,5 @@
 {
-  "name": "avenir",
+  "name": "start",
   "devDependencies": {
     "grunt": "latest",
     "grunt-bower-task": "latest",
@@ -9,5 +9,6 @@
     "grunt-contrib-jshint": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest"
+    "grunt-kss": "latest"
   }
 }
