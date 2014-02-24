@@ -2,6 +2,8 @@
 	"name": "start",
 	"dependencies": {
 		"jquery": "latest",
-		"foundation-css": "zurb/bower-foundation"
+		"bower-foundation": "latest",
+		"foundation5-sass": "latest",
+		"font-awesome": "latest"
 	}
 }
