@@ -1,6 +1,7 @@
 {
 	"name": "start",
 	"dependencies": {
+		"html5shiv": "latest",
 		"jquery": "latest",
 		"bower-foundation": "latest",
 		"foundation5-sass": "latest",
