@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			css: {
-				files: 'shared/scss/*.scss',
+				files: [ 'shared/scss/*.scss', 'shared/scss/*/*.scss' ],
 				tasks: [ 'compass', 'cssmin', 'autoprefixer' ]
 			},
 			js: {
