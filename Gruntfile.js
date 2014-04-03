@@ -88,7 +88,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-kss');
 
-	grunt.registerTask('default', [ 'watch' ]);
+	grunt.registerTask('default', [ 'compass', 'autoprefixer' ]);
 	grunt.registerTask('dist', [ 'compass', 'autoprefixer', 'cssmin', 'kss', 'uglify', 'jshint' ]);
 	grunt.registerTask('build', [ 'bower:install' ]);
 
