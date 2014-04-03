@@ -1,10 +1,15 @@
 {
 	"name": "start",
 	"dependencies": {
-		"html5shiv": "latest",
-		"jquery": "latest",
-		"bower-foundation": "latest",
-		"foundation5-sass": "latest",
-		"font-awesome": "latest"
+		"html5shiv": "*",
+		"jquery": "*",
+		"foundation": "*",
+		"font-awesome": "*"
+	},
+	"exportsOverride": {
+		"foundation": {
+			"foundation/scss": "scss",
+			"foundation/js": "js"
+		}
 	}
 }
