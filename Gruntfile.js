@@ -69,11 +69,11 @@ module.exports = function(grunt) {
 		watch: {
 			css: {
 				files: [ 'shared/scss/*.scss', 'shared/scss/*/*.scss' ],
-				tasks: [ 'compass', 'cssmin', 'autoprefixer' ]
+				tasks: [ 'compass', 'autoprefixer' ]
 			},
-			js: {
-				files: js,
-				tasks: [ 'uglify' ]
+			livereload: {
+				options: { livereload: true },
+				files: [ './*.css', './*.html', './*.php' ]
 			}
 		}
 	});
