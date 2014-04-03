@@ -3,12 +3,6 @@
 // HTML5
 $html5 : true;
 
-// IE
-$legacy-support-for-ie6 : true;
-$legacy-support-for-ie7 : true;
-$legacy-support-for-ie8 : true;
-$legacy-support-for-ie9 : true;
-
 // Modern
 $experimental-support-for-mozilla:true;
 $experimental-support-for-webkit:true;
@@ -21,12 +15,11 @@ $experimental-support-for-khtml:false;
 $experimental-support-for-svg:false;
 
 // Sprite
-$sprite: sprite-map("sprite/*.png", $spacing: 20px);
-$sprite-img:sprite-url($sprite);
+$spriteMap  : sprite-map("sprite/*.png", $spacing: 20px);
+$spriteUrl  : sprite-url($spriteMap);
 
 // font-family
 $fontFamily : "ヒラギノ角ゴPro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana,Arial,Helvetica,sans-serif;
-
 $fontCode   : monospace, "ＭＳ Ｐ ゴシック","MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", sans-serif;
 
 // Colum Base Width

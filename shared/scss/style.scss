@@ -4,22 +4,25 @@ Theme URI:
 Description: のテーマです。
 Version: 1.0
 */
-@import "setting";
-@import "default";
-@import "mixins";
-@import "functions";
 /* ========================================
  * foundation
 ======================================== */
-@import "foundation/functions";
+@import "settings";
 @import "foundation";
+
+/* ========================================
+ * original config
+======================================== */
+@import "config";
+@import "mixins";
+@import "functions";
 
 /* ========================================
  * layout
 ======================================== */
-@import "layout/*";
+@import "layout/*.*";
 
 /* ========================================
  * module
 ======================================== */
-@import "module/*";
+@import "modules/*.*";

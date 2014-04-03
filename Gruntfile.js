@@ -19,12 +19,6 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		cssmin: {
-			style: {
-				src: './style.css',
-				dest: './style.min.css'
-			}
-		},
 		compass: {
 			dist: {
 				options: {
@@ -40,7 +34,13 @@ module.exports = function(grunt) {
 				options: {
 					map: true
 				},
-				src: './style.min.css',
+				src: './style.css',
+				dest: './style.css'
+			}
+		},
+		cssmin: {
+			style: {
+				src: './style.css',
 				dest: './style.min.css'
 			}
 		},
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-kss');
 
 	grunt.registerTask('default', [ 'watch' ]);
-	grunt.registerTask('dist', [ 'compass', 'cssmin', 'autoprefixer', 'kss', 'uglify', 'jshint' ]);
+	grunt.registerTask('dist', [ 'compass', 'autoprefixer', 'cssmin', 'kss', 'uglify', 'jshint' ]);
 	grunt.registerTask('build', [ 'bower:install' ]);
 
 };
