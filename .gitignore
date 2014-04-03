@@ -1,12 +1,13 @@
+.DS_Store
+docs/*
 node_modules/
+bower_components/
+lib/
+.idea/
+.sublime-*.*
 .sass-cache/
 *.swp
 *.log
-.DS_Store
-.idea/
-.idea/*
-bower_components/
-lib/
 wp-config.php
 wp-content/uploads/
 wp-content/blogs.dir/
@@ -14,7 +15,6 @@ wp-content/upgrade/
 wp-content/backup-db/
 wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
-sitemap.xml
 wp-content/cache/
 wp-content/backups/
 sitemap.xml
