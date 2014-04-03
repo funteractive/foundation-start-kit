@@ -4,7 +4,7 @@
 		"html5shiv": "*",
 		"jquery": "*",
 		"foundation": "*",
-		"font-awesome": "*"
+		"fontawesome": "*"
 	},
 	"exportsOverride": {
 		"foundation": {
