@@ -3,6 +3,24 @@
 var js = 'shared/js/script.js',
 	minJs = 'shared/js/script.min.js';
 
+var licenseRegexp = /^\!|^@preserve|^@cc_on|\bMIT\b|\bMPL\b|\bGPL\b|\(c\)|License|Copyright/mi;
+var isLicenseComment = (function() {
+	var _prevCommentLine = 0;
+
+	return function(node, comment) {
+		if (licenseRegexp.test(comment.value) ||
+				comment.line === 1 ||
+				comment.line === _prevCommentLine + 1) {
+			_prevCommentLine = comment.line;
+			return true;
+		}
+
+		_prevCommentLine = 0;
+		return false;
+	};
+})();
+
+
 module.exports = function(grunt) {
 
 	// Project configuration.
@@ -48,10 +66,35 @@ module.exports = function(grunt) {
 			all: [js, minJs]
 		},
 		uglify: {
-			my_target: {
-				files: {
-					'shared/js/script.min.js': [js]
-				}
+			dist:{
+				options:{
+					preserveComments: isLicenseComment
+				},
+				files: [
+					{
+						expand : true,
+						flatten: true,
+						src: ['shared/js/lib/*.js'],
+						dest: 'shared/js/tmp_lib/'
+					},
+					{
+						expand : true,
+						flatten: true,
+						src: ['shared/js/dev/*.js'],
+						dest: 'shared/js/tmp_dev/'
+					}
+
+				]
+			}
+		},
+		concat: {
+			lib: {
+				src: ['shared/js/tmp_lib/*.js'],
+				dest: 'shared/js/lib.min.js'
+			},
+			dev: {
+				src: ['shared/js/tmp_dev/*.js'],
+				dest: 'shared/js/script.min.js'
 			}
 		},
 		kss: {
@@ -75,6 +118,9 @@ module.exports = function(grunt) {
 				options: { livereload: true },
 				files: [ './*.css', './*.html', './*.php' ]
 			}
+		},
+		clean:{
+			tmpfiles: ['shared/js/tmp_lib/','shared/js/tmp_dev/']
 		}
 	});
 
@@ -84,12 +130,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-kss');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.registerTask('default', [ 'compass', 'autoprefixer' ]);
-	grunt.registerTask('dist', [ 'compass', 'autoprefixer', 'cssmin', 'kss', 'uglify', 'jshint' ]);
+	grunt.registerTask('dist', [ 'compass', 'autoprefixer', 'cssmin', 'kss', 'uglify', 'concat' , 'clean' ]);
 	grunt.registerTask('build', [ 'bower:install' ]);
 
 };

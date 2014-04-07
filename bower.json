@@ -1,5 +1,11 @@
 {
 	"name": "start",
+	"main": "index.js",
+	"ignore":[
+		"**/.*",
+		"node_modules",
+		"components"
+	],
 	"dependencies": {
 		"html5shiv": "*",
 		"jquery": "*",
