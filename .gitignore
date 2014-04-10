@@ -1,8 +1,6 @@
 .DS_Store
 docs/*
 node_modules/
-bower_components/
-lib/
 .idea/
 .sublime-*.*
 .sass-cache/

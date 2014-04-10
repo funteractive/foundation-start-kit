@@ -80,8 +80,8 @@ module.exports = function(grunt) {
 					{
 						expand : true,
 						flatten: true,
-						src: ['shared/js/dev/*.js'],
-						dest: 'shared/js/tmp_dev/'
+						src: ['shared/js/app/*.js'],
+						dest: 'shared/js/tmp_app/'
 					}
 
 				]
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 				dest: 'shared/js/lib.min.js'
 			},
 			dev: {
-				src: ['shared/js/tmp_dev/*.js'],
+				src: ['shared/js/tmp_app/*.js'],
 				dest: 'shared/js/script.min.js'
 			}
 		},
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
 			}
 		},
 		clean:{
-			tmpfiles: ['shared/js/tmp_lib/','shared/js/tmp_dev/']
+			tmpfiles: ['shared/js/tmp_lib/','shared/js/tmp_app/']
 		}
 	});
 
