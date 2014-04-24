@@ -1,5 +1,8 @@
 {
-  "name": "start",
+  "name": "Funteractive",
+  "uri": "http://funteractive.jp/",
+  "description": "funteractive start theme",
+  "version": "0.0.1",
   "devDependencies": {
     "grunt": "latest",
     "grunt-bower-task": "latest",
@@ -11,6 +14,9 @@
     "grunt-contrib-clean": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-kss": "latest"
+    "grunt-kss": "latest",
+    "grunt-csso": "^0.6.1",
+    "grunt-contrib-jade": "^0.11.0",
+    "grunt-csscomb": "^2.0.1"
   }
 }

@@ -8,14 +8,27 @@
 	],
 	"dependencies": {
 		"html5shiv": "*",
-		"jquery": "*",
-		"foundation": "*",
+		"jquery": "~1.9.x",
+		"foundation": null,
 		"fontawesome": "*"
 	},
 	"exportsOverride": {
-		"foundation": {
-			"foundation/scss": "scss",
-			"foundation/js": "js"
+		"jquery": {
+			"": "**/jquery.min.js"
+		},
+		"html5shiv": {
+			"": "**/html5shiv-printshiv.js"
+		},
+		"fontawesome": {
+			"fonts": "fonts/*",
+			"scss": "scss/*"
+		},
+		"foundation":{
+			"scss": "scss",
+			"js": "js"
 		}
+	},
+	"resolutions": {
+		"jquery": "~1.9.x"
 	}
 }

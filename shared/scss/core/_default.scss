@@ -1,22 +1,3 @@
-@charset "utf-8";
-/* =============================================== */
-/** HTML5 display definitions */
-/* ----------------------------------------------- */
-article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary {
-  display: block;
-  margin:0;
-}
-audio,canvas,video {
-  display: inline-block;
-}
-audio:not([controls]) {
-  display: none;
-  height: 0;
-}
-[hidden] {
-  display: none;
-}
-
 /* =============================================== */
 /** The root element */
 /* ----------------------------------------------- */
@@ -31,8 +12,9 @@ html {
 /** Sections */
 /* ----------------------------------------------- */
 body{
-  font-size: rem-calc(14);
-  font-family: $fontFamily;
+  font:13px/1.231 $fontFamily;
+  *font-size:small;
+  *font:x-small;
   height: 100%;
   &:before {
     content: "";
@@ -42,7 +24,33 @@ body{
     margin-top: -32767px;
   }
 }
-
+html>/**/body {
+  font-size /*\**/: small\10;
+}
+body,h1,h2,h3,h4,h5,h6{
+ margin:0;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-size: 100%;
+}
+/* =============================================== */
+/** HTML5 display definitions */
+/* ----------------------------------------------- */
+article,aside,details,figcaption,figure,footer,header,main,nav,section,summary {
+  display: block;
+  margin:0;
+}
+audio,canvas,video,progress {
+  display: inline-block;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
 /* =============================================== */
 /** Grouping content */
 /* ----------------------------------------------- */
@@ -66,29 +74,27 @@ iframe {
 /** Text-level semantics */
 /* ----------------------------------------------- */
 a {
-  &:focus{
-    outline: thin dotted;
-  }
-  &:link, &:visited {
-    color: $linkColor;
-  }
-  &:hover, &:active {
+  background: transparent;
+  &:active,
+  &:hover{
     outline: 0;
-    color: $linkColor_hover;
   }
 }
 b,strong {
   font-weight: bold;
 }
 small {
-  font-size: 100%;
+  font-size: 92%;
 }
 q {
   quotes: "\201C" "\201D" "\2018" "\2019";
 }
-abbr[title],dfn[title] {
+abbr[title] {
   cursor:pointer;
-  border-bottom:1px dotted #000;
+  border-bottom:1px dotted;
+}
+pre{
+  overflow: auto;
 }
 code,kbd,pre,samp {
   font-family: $fontCode;
@@ -117,7 +123,6 @@ sub {
 /* ----------------------------------------------- */
 img {
   border: 0;
-  vertical-align: bottom;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -132,7 +137,9 @@ table {
   font-size:inherit;
   font:100%;
 }
-
+td,th{
+  padding:0;
+}
 /* =============================================== */
 /** Forms */
 /* ----------------------------------------------- */
@@ -145,10 +152,10 @@ legend {
   border: 0;
   padding: 0;
 }
-button,input,select,textarea {
-  font:99% arial,helvetica,clean,sans-serif;
-  margin:0;
-  vertical-align:baseline;
+button,input,select,textarea,optgroup {
+  color: inherit;
+  font: inherit;
+  margin: 0;
 }
 button,input {
   line-height: normal;
@@ -159,6 +166,7 @@ input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
+  background-color: transparent;
 }
 button[disabled],
 input[disabled] {
@@ -168,6 +176,10 @@ input[type="checkbox"],
 input[type="radio"] {
   box-sizing: border-box;
   padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
 }
 input[type="search"] {
   -webkit-appearance: textfield;
@@ -187,4 +199,7 @@ input::-moz-focus-inner {
 textarea {
   overflow: auto;
   vertical-align: top;
+}
+optgroup {
+  font-weight: bold;
 }

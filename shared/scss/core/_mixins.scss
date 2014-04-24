@@ -1,7 +1,4 @@
 @charset "utf-8";
-/* =============================================== */
-/** extend */
-/* ----------------------------------------------- */
 // Column
 %baseColumn{
   width:$baseWidth;
@@ -19,75 +16,86 @@
   }
 }
 //***********************
-// Sprite(Resposive/Retina)
-// spriteが複数の場合に対応
+// CSS Sprite for Retina Display
 // @name file
 // @spDir sprite-map
 // @spUrl sprite-url
 //***********************
 @mixin sprite-ir($name,$spDir:false,$spUrl:false,$inline:false,$hover:false,$center:false,$posX:false,$posY:false,$mobile:false) {
+  $currentDir:false;
+  $currentUrl:false;
+
   // sprite-map
   @if $spDir {
-    $spDir: $spDir;
+    $currentDir: $spDir;
   }@else{
-    $spDir: $spriteMap;
+    $currentDir: $spriteMap;
   }
   // sprite-url
   @if $spUrl {
-    $spUrl: $spUrl;
+    $currentUrl: $spUrl;
   }@else{
-    $spUrl: $spriteUrl;
+    $currentUrl: $spriteUrl;
   }
-  // background
-  $filePath   : sprite-file($spDir, $name);
+
+  // background-image
+  background-image: if( $mobile == true, $currentUrl none, $currentUrl ) ;
+  background-repeat: none;
+  height: 0;
+  overflow: hidden;
+
+  // file
+  $filePath   : sprite-file($currentDir, $name);
   $fileHeight : image-height($filePath);
   $fileWidth  : image-width($filePath);
-  $fileXpos   : nth(sprite-position($spDir, $name), 1);
-  $fileYpos   : nth(sprite-position($spDir, $name), 2);
+  $fileXpos   : nth(sprite-position($currentDir, $name), 1);
+  $fileYpos   : nth(sprite-position($currentDir, $name), 2);
+
+  // position
   @if $posY{
     $fileYpos : $fileYpos  + $posY;
   }
   @if $posX{
     $fileXpos : $fileXpos  + $posX;
   }
+
+  // item
   @if $mobile{
-    $spritePath : sprite-path($spDir);
+    $spritePath : sprite-path($currentDir);
     $spriteWidth  : round(image-width($spritePath) / 2);
     $spriteHeight : round(image-height($spritePath) / 2);
-    background-image: $spDir, none;
     background-position:round( ( $fileXpos / 2)) round( ( $fileYpos / 2 ) ) ;
     padding-top: round($fileHeight / 2);
     width: round($fileWidth / 2);
     -webkit-background-size: $spriteWidth, $spriteHeight;
             background-size: $spriteWidth, $spriteHeight;
-  }@else{
-    background-image: $spUrl;
+  } @else {
     background-position:round($fileXpos) round($fileYpos);
     padding-top: round($fileHeight);
     width: round($fileWidth);
   }
-  overflow: hidden;
-  height: 0;
-  background-repeat: no-repeat;
+
   // inline-block
   @if $inline { @include inline-block(); }
   @else { display: block; }
+
   // center
   @if $center {
     margin-left: auto;
     margin-right: auto;
   }
+
   // hover
   @if $hover{
-    $hoverXpos   : round(nth(sprite-position($spDir, #{$name}_on), 1));
-    $hoverYpos   : round(nth(sprite-position($spDir, #{$name}_on), 2));
+    $hoverXpos   : round(nth(sprite-position($currentDir, #{$name}_on), 1));
+    $hoverYpos   : round(nth(sprite-position($currentDir, #{$name}_on), 2));
     @if $posX{
       $hoverXpos : $hoverXpos + $posX;
     }
     @if $posY{
       $hoverYpos : $hoverYPos + $posY;
     }
-    &:hover, &.active,&.is-active{
+    &:hover,&.is-active{
       background-position: $hoverXpos $hoverYpos;
     }
   }
@@ -212,4 +220,12 @@
       }
     }
   }
+}
+//***********************
+// min height
+//***********************
+@mixin min-height($height){
+  min-height:$height;
+  height: auto !important;
+  height: $height;
 }

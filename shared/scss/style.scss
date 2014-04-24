@@ -1,34 +1,36 @@
-/*
-Theme Name: Funteractive Startup Theme with Foundation
-Theme URI: 
-Description: のテーマです。
-Version: 1.0
+@charset "UTF-8";
+/*!
+ Theme Name: Funteractive
+ Theme URI: http://funteractive.jp/
+ Description: funteractive start theme
+ Version: 0.0.1
 */
-/* ========================================
- * foundation
-======================================== */
-@import "settings";
-@import "foundation";
-
-/* ========================================
- * original config
-======================================== */
-@import "config";
-@import "default";
-@import "mixins";
-@import "functions";
-
-/* ========================================
- * library
-======================================== */
-@import "../../lib/fontawesome/scss/font-awesome";
-
-/* ========================================
- * layout
-======================================== */
-@import "layout/*.*";
-
-/* ========================================
- * module
-======================================== */
+// ========================================
+// foundation
+// ========================================
+//@import "core/settings";
+//@import "core/foundation";
+//========================================
+// original config
+//========================================
+@import "core/config";
+@import "core/default";
+@import "core/mixins";
+@import "core/functions";
+//========================================
+// library
+//========================================
+//@import "../lib/fontawesome/scss/font-awesome";
+//========================================
+// layout
+//========================================
+@import "layout/layout";
+@import "layout/layout-header";
+@import "layout/layout-archive";
+@import "layout/layout-page";
+@import "layout/layout-single";
+@import "layout/layout-footer";
+//========================================
+// module
+//======================================== */
 @import "module/*.*";
