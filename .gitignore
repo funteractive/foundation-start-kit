@@ -1,8 +1,6 @@
 .DS_Store
 docs/*
 node_modules/
-bower_components/
-lib/
 .idea/
 .sublime-*.*
 .sass-cache/
@@ -21,3 +19,5 @@ sitemap.xml
 sitemap.xml.gz
 .htaccess
 searchreplacedb2.php
+shared/lib/
+bower_components/

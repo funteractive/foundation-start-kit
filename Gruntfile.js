@@ -112,8 +112,8 @@ module.exports = function(grunt) {
           {
             expand : true,
             flatten: true,
-            src: ['shared/js/dev/*.js'],
-            dest: 'shared/js/tmp_dev/'
+            src: ['shared/js/app/*.js'],
+            dest: 'shared/js/tmp_app/'
           }
         ]
       }
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
         dest: 'shared/js/lib.min.js'
       },
       dev: {
-        src: ['shared/js/tmp_dev/*.js'],
+        src: ['shared/js/tmp_app/*.js'],
         dest: 'shared/js/script.min.js'
       }
     },
@@ -168,10 +168,10 @@ module.exports = function(grunt) {
   }
 
   // default
-  grunt.registerTask('default', [ 'watch','csso:style','uglify', 'concat' ]);
+  grunt.registerTask('default', [ 'watch','csso','uglify', 'concat' ]);
 
   // release
-  grunt.registerTask('dist', ['jade', 'clean:stylefiles', 'compass', 'autoprefixer', 'csso:style', 'kss', 'uglify', 'concat' , 'clean:tmpfiles' ]);
+  grunt.registerTask('dist', ['jade', 'clean:stylefiles', 'compass', 'autoprefixer', 'csso', 'kss', 'uglify', 'concat' , 'clean:tmpfiles' ]);
 
   // build
   grunt.registerTask('build', [ 'bower:install' ]);
