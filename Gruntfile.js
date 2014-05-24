@@ -45,13 +45,14 @@ module.exports = function(grunt) {
     jade: {
       compile: {
         options: {
-          pretty: true
+          pretty: true,
+          data: grunt.file.readJSON('setting.json')
         },
         files: [{
           expand: true,
-          cwd: 'jade',
+          cwd: './shared/jade',
           src: ['**/*.jade','!**/_*.jade'],
-          dest: '',
+          dest: './',
           ext: '.html'
         }]
       }
@@ -145,12 +146,16 @@ module.exports = function(grunt) {
     // watch
     watch: {
       jade:{
-        files: [ 'jade/*.jade', 'jade/**/*.jade' ],
+        files: [ 'shared/jade/*.jade', 'shared/jade/**/*.jade' ],
         tasks: [ 'jade' ]
       },
       css: {
         files: [ 'shared/scss/*.scss', 'shared/scss/**/*.scss' ],
         tasks: [ 'compass','autoprefixer' ]
+      },
+      livereload: {
+        options: { livereload: true },
+        files: [ './*.css', './*.html', './*.php' ]
       }
     },
     // clean

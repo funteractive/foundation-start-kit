@@ -1,92 +1,54 @@
 (function ($) {
-    $(function () {
+  $(document).ready(function() {
 
-        var $window = $(window),
-            $document = $(document),
-            $content = $('.kss-content'),
-            $sidebar = $('.kss-sidebar'),
-            $sidebarInner = $('.kss-sidebar-inner'),
-            $menu = $('.kss-menu'),
-            $childMenu = $('.kss-menu-child'),
-            $menuItem = $menu.find('.kss-menu-item'),
-            $childMenuItem = $childMenu.find('.kss-menu-item'),
-            ref = $menu.data('kss-ref'),
-            prevScrollTop;
+    var offcanvas = {
+      init: function() {
+        this.$menu = $('.mknt-menu');
+        this.$open = $('.mknt-openMenu');
+        this.$close = $('.mknt-menu__close');
 
-        // Dynamic menu activation
-        function scrollSpy() {
-            var scrollTop = $window.scrollTop(),
-                $anchors = $childMenu.find('a'),
-                activeIndex;
-            $anchors.each(function (index) {
-                var $target = $($(this).attr('href').replace(/\./g, '\\.')),
-                    offsetTop = $target.offset().top,
-                    offsetBottom = offsetTop + $target.outerHeight(true);
-                if (offsetTop <= scrollTop && scrollTop < offsetBottom) {
-                    activeIndex = index;
-                    return false;
-                }
-            });
-            $childMenuItem.removeClass('kss-active');
-            if (typeof activeIndex !== 'undefined') {
-                $childMenuItem.eq(activeIndex).addClass('kss-active');
-            }
-        }
+        this.duration = 300;
 
-        // Fix sidebar position
-        function fixSidebar() {
-            if ($sidebarInner.outerHeight() < $content.outerHeight()) {
-                $sidebar.addClass('kss-fixed');
-                if ($sidebarInner.outerHeight() > $window.height()) {
-                    $sidebar.height($window.height());
-                    $window.on('scroll', scrollSidebar).trigger('scroll');
-                }
-                else {
-                    $sidebar.height('auto');
-                    $window.off('scroll', scrollSidebar);
-                }
-            }
-            else {
-                $sidebar.removeClass('kss-fixed');
-                $sidebar.height('auto');
-                $window.off('scroll', scrollSidebar);
-            }
-        }
+        //set event
+        this.setEvent();
 
-        // Synchronize sidebar scroll
-        function scrollSidebar(event) {
-            if (event.handled !== true) {
-                var scrollTop = $window.scrollTop(),
-                    maxScrollTop = $document.height() - $window.height();
-                if (scrollTop >= 0 && prevScrollTop >= 0 && scrollTop <= maxScrollTop && prevScrollTop <= maxScrollTop) {  // for Mac scrolling
-                    $sidebar.scrollTop($sidebar.scrollTop() + (scrollTop - prevScrollTop));
-                }
-                prevScrollTop = scrollTop;
-                event.handled = true;
-            }
-            else {
-                return false;
-            }
-        }
+        //menu default css
+        this.$menu.css({
+          right: '-300px'
+        });
+      },
 
-        // Activate current page item
-        $menuItem.eq(ref).addClass('kss-active');
+      setEvent: function() {
+        var that = this;
+        this.$open.on('click', function(e) {
+          e.preventDefault();
+          that.open();
+        });
+        this.$close.on('click', function(e) {
+          e.preventDefault();
+          that.close();
+        });
+      },
 
-        // Append child menu and attach scrollSpy
-        if ($childMenu.length) {
-            $childMenu.show().appendTo($menuItem.eq(ref));
-            $window.on('scroll', scrollSpy).trigger('scroll');
-        }
+      open: function() {
+        this.$menu.animate({
+          right: '0px'
+        }, this.duration);
+      },
 
-        // Fixed sidebar
-        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            $window.on('resize', fixSidebar).trigger('resize');
-        }
+      close: function() {
+        this.$menu.animate({
+          right: '-300px'
+        }, this.duration);
+      }
+    };
+    offcanvas.init();
 
-        // Syntax hightlignting with Rainbow.js
-        $('code.html').attr('data-language', 'html');
-        $('code.css').attr('data-language', 'css');
-        $('code.less, code.scss').attr('data-language', 'generic');
 
-    });
+    // Syntax hightlignting with Rainbow.js
+    $('code.html').attr('data-language', 'html');
+    $('code.css').attr('data-language', 'css');
+    $('code.less, code.scss').attr('data-language', 'generic');
+
+  });
 }(jQuery));

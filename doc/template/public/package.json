@@ -1,0 +1,12 @@
+{
+  "name": "jquery-plugin-framework",
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-bower-task": "*",
+    "grunt-contrib-sass": "*",
+    "grunt-autoprefixer": "*",
+    "grunt-contrib-csslint": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-watch": "*"
+  }
+}

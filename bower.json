@@ -1,34 +1,31 @@
 {
-	"name": "start",
-	"main": "index.js",
-	"ignore":[
-		"**/.*",
-		"node_modules",
-		"components"
-	],
-	"dependencies": {
-		"html5shiv": "*",
-		"jquery": "~1.9.x",
-		"foundation": null,
-		"fontawesome": "*"
-	},
-	"exportsOverride": {
-		"jquery": {
-			"": "**/jquery.min.js"
-		},
-		"html5shiv": {
-			"": "**/html5shiv-printshiv.js"
-		},
-		"fontawesome": {
-			"fonts": "fonts/*",
-			"scss": "scss/*"
-		},
-		"foundation":{
-			"scss": "scss",
-			"js": "js"
-		}
-	},
-	"resolutions": {
-		"jquery": "~1.9.x"
-	}
+  "name": "start",
+  "main": "index.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "html5shiv": "*",
+    "jquery": "*",
+    "foundation": null,
+    "fontawesome": "*"
+  },
+  "exportsOverride": {
+    "jquery": {
+      "": "**/jquery.min.js"
+    },
+    "html5shiv": {
+      "": "**/html5shiv-printshiv.js"
+    },
+    "fontawesome": {
+      "fonts": "fonts/*",
+      "scss": "scss/*"
+    },
+    "foundation": {
+      "scss": "scss",
+      "js": "js"
+    }
+  }
 }

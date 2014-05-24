@@ -5,6 +5,7 @@ node_modules/
 .sublime-*.*
 .sass-cache/
 *.swp
+*.un~
 *.log
 wp-config.php
 wp-content/uploads/
@@ -19,5 +20,3 @@ sitemap.xml
 sitemap.xml.gz
 .htaccess
 searchreplacedb2.php
-shared/lib/
-bower_components/
