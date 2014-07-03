@@ -6,6 +6,7 @@
   "devDependencies": {
     "grunt": "latest",
     "grunt-bower-task": "latest",
+    "grunt-browser-sync": "^0.9.1",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-compass": "latest",
     "grunt-autoprefixer": "latest",

@@ -7,24 +7,16 @@ html(xmlns:og="http://ogp.me/ns#", xmlns:fb='https://www.facebook.com/2008/fbml'
       meta(name='description', content=description)
       meta(name='keywords', content=keywords)
     block link
-      link(rel='icon', href='/favicon.png')
+      link(rel='icon', href='/favicon.ico')
       link(rel='shortcut icon', href='/favicon.ico')
       link(rel='apple-touch-icon', href='/apple-touch-icon.png')
       link(rel='stylesheet', href='style.css')
     block script
       != '\n<!--[if lt IE 9]>'
-      script(src="shared/js/app/html5shiv-printshiv.js")
+      script(src="shared/js/lib/html5shiv/html5shiv-printshiv.js")
       != '\n<![endif]-->'
-  body
+  body(class="#{bodyClass}")
     #fb-root
-    script.
-      (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1";
-      fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
     block body
     block scriptFooter
       script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")

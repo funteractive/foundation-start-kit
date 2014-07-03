@@ -41,6 +41,24 @@ module.exports = function(grunt) {
         }
       }
     },
+    // Brower Sync
+    browserSync: {
+      dev: {
+        bsFiles: {
+          src : [
+            './style.css',
+            './*.html',
+            './shared/img/**/**',
+            './shared/js/*.js',
+            './*.php'
+          ]
+        },
+        options: {
+          proxy: "square.localdev",
+          watchTask: true
+        }
+      }
+    },
     // jade
     jade: {
       compile: {
@@ -145,6 +163,9 @@ module.exports = function(grunt) {
     },
     // watch
     watch: {
+      options: {
+        spawn: false
+      },
       jade:{
         files: [ 'shared/jade/*.jade', 'shared/jade/**/*.jade' ],
         tasks: [ 'jade' ]
@@ -153,6 +174,10 @@ module.exports = function(grunt) {
         files: [ 'shared/scss/*.scss', 'shared/scss/**/*.scss' ],
         tasks: [ 'compass','autoprefixer' ]
       },
+      js: {
+        files: [ 'shared/js/app/*.js'],
+        tasks: [ 'uglify','concat','clean']
+      },
       livereload: {
         options: { livereload: true },
         files: [ './*.css', './*.html', './*.php' ]
@@ -160,8 +185,7 @@ module.exports = function(grunt) {
     },
     // clean
     clean:{
-      stylefiles: ['style.css','style.min.css'],
-      tmpfiles: ['shared/js/tmp_lib/','shared/js/tmp_dev/']
+      tmpfiles: ['shared/js/tmp_lib/','shared/js/tmp_app/']
     }
   });
 
@@ -173,10 +197,10 @@ module.exports = function(grunt) {
   }
 
   // default
-  grunt.registerTask('default', [ 'watch','csso','uglify', 'concat' ]);
+  grunt.registerTask('default', [ 'browserSync', 'watch','csso','uglify', 'concat','clean' ]);
 
   // release
-  grunt.registerTask('dist', ['jade', 'clean:stylefiles', 'compass', 'autoprefixer', 'csso', 'kss', 'uglify', 'concat' , 'clean:tmpfiles' ]);
+  grunt.registerTask('dist', ['jade', 'compass', 'autoprefixer', 'csso', 'kss', 'uglify', 'concat' , 'clean' ]);
 
   // build
   grunt.registerTask('build', [ 'bower:install' ]);

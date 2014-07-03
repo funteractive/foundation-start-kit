@@ -15,13 +15,38 @@
     font-size:0;
   }
 }
+// Clearfix
+%group{
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+    font-size:0;
+  }
+}
+/* extend sprite-ir
+---------------------------------------- */
+%ir-pc{
+  background-image: $spriteUrl;
+  background-repeat: no-repeat;
+  height: 0;
+  overflow: hidden;
+}
+%ir-mb{
+  background-image: $spriteUrl,none;
+  background-repeat: no-repeat;
+  height: 0;
+  overflow: hidden;
+}
 //***********************
 // CSS Sprite for Retina Display
 // @name file
 // @spDir sprite-map
 // @spUrl sprite-url
 //***********************
-@mixin sprite-ir($name,$spDir:false,$spUrl:false,$inline:false,$hover:false,$center:false,$posX:false,$posY:false,$mobile:false) {
+@mixin sprite-ir($name,$spDir:false,$spUrl:false,$inline:false,$hover:false,$center:false,$posX:false,$posY:false,$mobile:false,$parent:false,$display:false) {
   $currentDir:false;
   $currentUrl:false;
 
@@ -39,10 +64,22 @@
   }
 
   // background-image
-  background-image: if( $mobile == true, $currentUrl none, $currentUrl ) ;
-  background-repeat: none;
-  height: 0;
-  overflow: hidden;
+  @if ($parent == false){
+    @if $mobile{
+      background-image: $currentUrl,none;
+    }@else{
+      background-image: $currentUrl;
+    }
+    background-repeat: no-repeat;
+    height: 0;
+    overflow: hidden;
+  } @else {
+    @if $mobile{
+      @extend %ir-mb;
+    } @else {
+      @extend %ir-pc;
+    }
+  }
 
   // file
   $filePath   : sprite-file($currentDir, $name);
@@ -77,7 +114,11 @@
 
   // inline-block
   @if $inline { @include inline-block(); }
-  @else { display: block; }
+  @else {
+    @if $display == false{
+      display: block;
+    }
+  }
 
   // center
   @if $center {
@@ -87,86 +128,22 @@
 
   // hover
   @if $hover{
-    $hoverXpos   : round(nth(sprite-position($currentDir, #{$name}_on), 1));
-    $hoverYpos   : round(nth(sprite-position($currentDir, #{$name}_on), 2));
+    $hoverXpos:0;
+    $hoverYpos:0;
+    @if $mobile{
+      $hoverXpos : round(nth(sprite-position($currentDir, #{$name}_on), 1) / 2);
+      $hoverYpos : round(nth(sprite-position($currentDir, #{$name}_on), 2) / 2);
+    }@else{
+      $hoverXpos : round(nth(sprite-position($currentDir, #{$name}_on), 1));
+      $hoverYpos : round(nth(sprite-position($currentDir, #{$name}_on), 2));
+    }
     @if $posX{
       $hoverXpos : $hoverXpos + $posX;
     }
     @if $posY{
       $hoverYpos : $hoverYPos + $posY;
     }
-    &:hover,&.is-active{
-      background-position: $hoverXpos $hoverYpos;
-    }
-  }
-}
-
-//***********************
-// Sprite
-// extend仕様
-//***********************
-%ir-pc{
-  background-image: $spriteUrl;
-  overflow: hidden;
-  height:0;
-  background-repeat:no-repeat;
-}
-%ir-mb{
-  background-image: $spriteUrl,none;
-  overflow: hidden;
-  height:0;
-  background-repeat:no-repeat;
-}
-@mixin sprite-extend($name,$inline:false,$hover:false,$center:false,$posX:false,$posY:false,$mobile:false) {
-
-  // background
-  $filePath   : sprite-file($spriteMap, $name);
-  $fileHeight : image-height($filePath);
-  $fileWidth  : image-width($filePath);
-  $fileXpos   : nth(sprite-position($spriteMap, $name), 1);
-  $fileYpos   : nth(sprite-position($spriteMap, $name), 2);
-  @if $posY{
-    $fileYpos : $fileYpos  + $posY;
-  }
-  @if $posX{
-    $fileXpos : $fileXpos  + $posX;
-  }
-  @if $mobile{
-    $spritePath : sprite-path($spriteMap);
-    $spriteWidth  : round(image-width($spritePath) / 2);
-    $spriteHeight : round(image-height($spritePath) / 2);
-    @extend %ir-mb;
-    background-position:round( ( $fileXpos / 2)) round( ( $fileYpos / 2 ) ) ;
-    padding-top: round($fileHeight / 2);
-    width: round($fileWidth / 2);
-    -webkit-background-size: $spriteWidth, $spriteHeight;
-            background-size: $spriteWidth, $spriteHeight;
-  }@else{
-    @extend %ir-pc;
-    background-position:round($fileXpos) round($fileYpos);
-    padding-top: round($fileHeight);
-    width: round($fileWidth);
-  }
-
-  // inline-block
-  @if $inline { @include inline-block(); }
-  @else { display: block; }
-  // center
-  @if $center {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  // hover
-  @if $hover{
-    $hoverXpos   : round(nth(sprite-position($spriteMap, #{$name}_on), 1));
-    $hoverYpos   : round(nth(sprite-position($spriteMap, #{$name}_on), 2));
-    @if $posX{
-      $hoverXpos : $hoverXpos + $posX;
-    }
-    @if $posY{
-      $hoverYpos : $hoverYPos + $posY;
-    }
-    &:hover, &.active,&.is-active{
+    &:hover,&.is-active,a:hover &{
       background-position: $hoverXpos $hoverYpos;
     }
   }
@@ -220,6 +197,14 @@
       }
     }
   }
+}
+//***********************
+// inline-block
+//***********************
+@mixin inline-block(){
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
 }
 //***********************
 // min height

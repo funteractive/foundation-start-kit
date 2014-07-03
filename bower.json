@@ -1,6 +1,5 @@
 {
   "name": "start",
-  "main": "index.js",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -10,7 +9,9 @@
     "html5shiv": "*",
     "jquery": "*",
     "foundation": null,
-    "fontawesome": "*"
+    "fontawesome": "*",
+    "imagesloaded": "*",
+    "bxslider": "*"
   },
   "exportsOverride": {
     "jquery": {
@@ -26,6 +27,9 @@
     "foundation": {
       "scss": "scss",
       "js": "js"
+    },
+    "imagesloaded":{
+      "": "**/imagesloaded.pkgd.min.js"
     }
   }
 }
