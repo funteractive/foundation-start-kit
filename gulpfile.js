@@ -93,14 +93,15 @@ gulp.task('sass', function() {
 
 gulp.task('sass', function() {
   return $.rubySass('./shared/scss/style.scss', {
-    loadPath: ['scss'],
-    style: 'nested',
-    bundleExec: false
-  })
+      loadPath: ['scss'],
+      style: 'nested',
+      bundleExec: false
+    })
     .on('error', function(err) { console.error('Error!', err.message); })
     .pipe($.autoprefixer({
       browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
+    .pipe($.csso())
     .pipe(gulp.dest('./'));
 });
 
@@ -119,7 +120,7 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
   browserify('./shared/js/src/app.js')
     .bundle()
-    .pipe(source('app.js'))
+    .pipe(source('build.js'))
     .pipe(buffer())
     .pipe($.uglify())
     .pipe(gulp.dest('./shared/js/'));
