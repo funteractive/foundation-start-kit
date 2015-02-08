@@ -114,6 +114,8 @@ gulp.task('sass', function() {
 
 // IMAGE
 // - - - - - - - - - - - - - - -
+
+// make sprite image and css for sprite
 gulp.task('sprite', function() {
   var spriteData = gulp.src('./shared/img/sprite/*.png')
     .pipe(spritesmith({
@@ -123,6 +125,7 @@ gulp.task('sprite', function() {
 
   // compile image
   spriteData.img
+    .pipe($.imagemin())
     .pipe(gulp.dest('./shared/img/'))
     .pipe(browserSync.reload({ stream:true }));
 
@@ -130,6 +133,13 @@ gulp.task('sprite', function() {
   spriteData.css
     .pipe(gulp.dest('./shared/scss/'))
     .pipe(browserSync.reload({ stream:true }));
+});
+
+// optimize images
+gulp.task('imagemin', function() {
+  return gulp.src('./shared/img/**/*.+(jpg|jpeg|png|gif|svg)')
+    .pipe($.imagemin())
+    .pipe(gulp.dest('./shared/img/'))
 });
 
 
@@ -155,6 +165,8 @@ gulp.task('js', function() {
 
 // NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
+
+// default tasks
 gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch Jade
   gulp.watch(['./shared/jade/*', './shared/jade/**/*'], ['jade']);
@@ -168,3 +180,6 @@ gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch JavaScript
   gulp.watch(['./shared/js/src/*'], ['js', browserSync.reload]);
 });
+
+// when before distribute, 'dist' task will be pursued.
+gulp.task('dist', ['jade', 'sass', 'js', 'sprite', 'imagemin']);
