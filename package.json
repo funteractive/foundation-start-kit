@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "gulp": "*",
+    "gulp-autoprefixer": "*",
     "gulp-load-plugins": "*",
     "gulp-ruby-sass": "1.0.0-alpha"
   }

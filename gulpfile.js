@@ -87,6 +87,9 @@ gulp.task('sass', function() {
     bundleExec: false
   })
     .on('error', function(err) { console.error('Error!', err.message); })
+    .pipe($.autoprefixer({
+      browsers: ['last 2 versions', 'ie 10', 'ie 9', 'ie 8']
+    }))
     .pipe(gulp.dest('./'));
 });
 
