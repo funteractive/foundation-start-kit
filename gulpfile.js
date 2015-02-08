@@ -57,11 +57,13 @@ var gulp         = require('gulp'),
 
 // SERVER
 // - - - - - - - - - - - - - - -
+
+// Run local server
 gulp.task('webserver', function() {
   gulp.src('./')
     .pipe($.webserver({
       livereload: true,
-      directoryListing: true,
+      directoryListing: false,
       open: true
     }));
 });
@@ -69,6 +71,8 @@ gulp.task('webserver', function() {
 
 // JADE
 // - - - - - - - - - - - - - - -
+
+// Compile Jade to HTML
 gulp.task('jade', function() {
   return gulp.src('./shared/jade/*.jade')
     .pipe($.data(function(file) {
@@ -81,28 +85,8 @@ gulp.task('jade', function() {
 
 // STYLESHEET
 // - - - - - - - - - - - - - - -
+
 // Compile stylesheets with Ruby Sass
-/*
-gulp.task('sass', function() {
-  //var filter = $.filter(['*.css']);
-
-  return $.rubySass('shared/scss/', {
-    loadPath: ['scss'],
-    style: 'nested'
-    //bundleExec: true
-  })
-    .on('error', function(err) {
-      console.log(err.message);
-    })
-    //.pipe(filter)
-    //.pipe($.autoprefixer({
-    //  browsers: ['last 2 versions', 'ie 10']
-    //}))
-    //.pipe(filter.restore())
-    .pipe(gulp.dest('./'));
-});
-*/
-
 gulp.task('sass', function() {
   return $.rubySass('./shared/scss/style.scss', {
       loadPath: ['scss'],
@@ -164,4 +148,16 @@ gulp.task('js', function() {
 
 // NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
-//gulp.task('js', ['browserify'])
+gulp.task('default', ['webserver', 'sprite'], function() {
+  // Watch Jade
+  gulp.watch(['./shared/jade/*', './shared/jade/**/*'], ['jade']);
+
+  // Watch Sprite
+  gulp.watch(['./shared/img/sprite/*.png'], ['sprite']);
+
+  // Watch Sass
+  gulp.watch(['./shared/scss/*', './shared/scss/**/*'], ['sass']);
+
+  // Watch JavaScript
+  gulp.watch(['./shared/js/src/*'], ['js']);
+});
