@@ -39,6 +39,12 @@ var gulp         = require('gulp'),
 // BUILD
 // - - - - - - - - - - - - - - -
 
+// install libraries with Bower
+gulp.task('bower', function() {
+  return $.bower()
+    .pipe(gulp.dest('bower_components/'));
+});
+
 // Generate Sass settings file
 //gulp.task('settings', function() {
 //  return settingsParser([

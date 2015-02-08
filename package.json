@@ -10,6 +10,7 @@
     "vinyl-source-stream": "*",
     "gulp": "*",
     "gulp-autoprefixer": "*",
+    "gulp-bower": "*",
     "gulp-csso": "*",
     "gulp-data": "*",
     "gulp-load-plugins": "*",
