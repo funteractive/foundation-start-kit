@@ -21,6 +21,7 @@
 // - - - - - - - - - - - - - - -
 
 var gulp         = require('gulp'),
+  spritesmith    = require('gulp.spritesmith'),
   $              = require('gulp-load-plugins')(),
   browserify     = require('browserify'),
   buffer         = require('vinyl-buffer'),
@@ -122,6 +123,21 @@ gulp.task('sass', function() {
 
 // IMAGE
 // - - - - - - - - - - - - - - -
+gulp.task('sprite', function() {
+  var spriteData = gulp.src('./shared/img/sprite/*.png')
+    .pipe(spritesmith({
+      imgName: 'sprite.png',
+      cssName: '_sprite.scss'
+    }));
+
+  // compile image
+  spriteData.img
+    .pipe(gulp.dest('./shared/img/'));
+
+  // compile scss
+  spriteData.css
+    .pipe(gulp.dest('./shared/scss/'));
+});
 
 
 // JAVASCRIPT
