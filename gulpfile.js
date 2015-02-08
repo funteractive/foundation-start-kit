@@ -21,7 +21,9 @@
 // - - - - - - - - - - - - - - -
 
 var gulp         = require('gulp'),
-  $              = require('gulp-load-plugins')()
+  $              = require('gulp-load-plugins')(),
+  browserify     = require('browserify'),
+  source         = require('vinyl-source-stream')
   //rimraf         = require('rimraf'),
   //runSequence    = require('run-sequence'),
   //modRewrite     = require('connect-modrewrite'),
@@ -55,7 +57,7 @@ var gulp         = require('gulp'),
 // JADE
 // - - - - - - - - - - - - - - -
 gulp.task('jade', function() {
-  return gulp.src('shared/jade/*.jade')
+  return gulp.src('./shared/jade/*.jade')
     .pipe($.data(function(file) {
       return require('./shared/jade/setting.json')
     }))
@@ -89,7 +91,7 @@ gulp.task('sass', function() {
 */
 
 gulp.task('sass', function() {
-  return $.rubySass('shared/scss/style.scss', {
+  return $.rubySass('./shared/scss/style.scss', {
     loadPath: ['scss'],
     style: 'nested',
     bundleExec: false
@@ -113,6 +115,12 @@ gulp.task('sass', function() {
 
 // JAVASCRIPT
 // - - - - - - - - - - - - - - -
+gulp.task('browserify', function() {
+  browserify('./shared/js/src/app.js')
+    .bundle()
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./shared/js/'));
+});
 
 
 // WATCH
@@ -121,3 +129,8 @@ gulp.task('sass', function() {
 
 // PRODUCTION
 // - - - - - - - - - - - - - - -
+
+
+// NOW BRING IT TOGETHER
+// - - - - - - - - - - - - - - -
+//gulp.task('js', ['browserify'])

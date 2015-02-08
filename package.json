@@ -4,6 +4,8 @@
   "description": "funteractive start kit with jade and foundation 5",
   "version": "0.1.0",
   "devDependencies": {
+    "browserify": "*",
+    "vinyl-source-stream": "*",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-data": "*",
