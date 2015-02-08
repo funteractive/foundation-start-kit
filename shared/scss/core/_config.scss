@@ -15,8 +15,8 @@ $experimental-support-for-khtml:false;
 $experimental-support-for-svg:false;
 
 // Sprite
-$spriteMap  : sprite-map("sprite/*.png", $spacing: 20px);
-$spriteUrl  : sprite-url($spriteMap);
+//$spriteMap  : sprite-map("sprite/*.png", $spacing: 20px);
+//$spriteUrl  : sprite-url($spriteMap);
 
 // font-family
 $fontFamily : "ヒラギノ角ゴPro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana,Arial,Helvetica,sans-serif;

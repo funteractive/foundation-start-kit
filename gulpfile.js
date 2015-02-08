@@ -20,14 +20,14 @@
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
 
-var gulp           = require('gulp'),
-  $              = require('gulp-load-plugins')(),
-  rimraf         = require('rimraf'),
-  runSequence    = require('run-sequence'),
-  modRewrite     = require('connect-modrewrite'),
-  routes         = require('./bin/gulp-dynamic-routing'),
-  merge          = require('merge-stream'),
-  settingsParser = require('settings-parser')
+var gulp         = require('gulp'),
+  $              = require('gulp-load-plugins')()
+  //rimraf         = require('rimraf'),
+  //runSequence    = require('run-sequence'),
+  //modRewrite     = require('connect-modrewrite'),
+  //routes         = require('./bin/gulp-dynamic-routing'),
+  //merge          = require('merge-stream'),
+  //settingsParser = require('settings-parser')
   ;
 
 
@@ -35,20 +35,20 @@ var gulp           = require('gulp'),
 // - - - - - - - - - - - - - - -
 
 // Generate Sass settings file
-gulp.task('settings', function() {
-  return settingsParser([
-    'scss/_includes.scss',
-    'scss/_global.scss',
-    'scss/helpers/_breakpoints.scss',
-    'scss/components/_typography.scss',
-    'scss/components/_grid.scss',
-    'scss/components/*.scss'
-  ], {
-    title: 'Foundation for Apps Settings'.toUpperCase(),
-    partialsPath: 'build/partials/scss',
-    settingsPath: 'scss'
-  });
-});
+//gulp.task('settings', function() {
+//  return settingsParser([
+//    'scss/_includes.scss',
+//    'scss/_global.scss',
+//    'scss/helpers/_breakpoints.scss',
+//    'scss/components/_typography.scss',
+//    'scss/components/_grid.scss',
+//    'scss/components/*.scss'
+//  ], {
+//    title: 'Foundation for Apps Settings'.toUpperCase(),
+//    partialsPath: 'build/partials/scss',
+//    settingsPath: 'scss'
+//  });
+//});
 
 
 
@@ -59,23 +59,35 @@ gulp.task('settings', function() {
 // STYLESHEET
 // - - - - - - - - - - - - - - -
 // Compile stylesheets with Ruby Sass
+/*
 gulp.task('sass', function() {
-  var filter = $.filter(['*.css']);
+  //var filter = $.filter(['*.css']);
 
-  return $.rubySass('docs/assets/scss/', {
+  return $.rubySass('shared/scss/', {
     loadPath: ['scss'],
-    style: 'nested',
-    bundleExec: true
+    style: 'nested'
+    //bundleExec: true
   })
     .on('error', function(err) {
       console.log(err.message);
     })
-    .pipe(filter)
-    .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'ie 10']
-    }))
-    .pipe(filter.restore())
-    .pipe(gulp.dest('./build/assets/css/'));
+    //.pipe(filter)
+    //.pipe($.autoprefixer({
+    //  browsers: ['last 2 versions', 'ie 10']
+    //}))
+    //.pipe(filter.restore())
+    .pipe(gulp.dest('./'));
+});
+*/
+
+gulp.task('sass', function() {
+  return $.rubySass('shared/scss/style.scss', {
+    loadPath: ['scss'],
+    style: 'nested',
+    bundleExec: false
+  })
+    .on('error', function(err) { console.error('Error!', err.message); })
+    .pipe(gulp.dest('./'));
 });
 
 
