@@ -1,5 +1,5 @@
 include inc/core/_config
-extends inc/core/_base_legacy
+extends inc/core/_base
 block title
   - var title = page.top.title
   title= title
@@ -12,8 +12,8 @@ block prepend meta
 block append meta
 block body
   div.l-container
-    include inc/layout/_layout_header
+    include inc/layout/_header
 
-  include inc/layout/_layout_footer
+  include inc/layout/_footer
 block append scriptFooter
 

@@ -54,6 +54,14 @@ var gulp         = require('gulp'),
 
 // JADE
 // - - - - - - - - - - - - - - -
+gulp.task('jade', function() {
+  return gulp.src('shared/jade/*.jade')
+    .pipe($.data(function(file) {
+      return require('./shared/jade/setting.json')
+    }))
+    .pipe($.jade({ pretty: true }))
+    .pipe(gulp.dest('./'))
+});
 
 
 // STYLESHEET
@@ -88,7 +96,7 @@ gulp.task('sass', function() {
   })
     .on('error', function(err) { console.error('Error!', err.message); })
     .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'ie 10', 'ie 9', 'ie 8']
+      browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
     .pipe(gulp.dest('./'));
 });

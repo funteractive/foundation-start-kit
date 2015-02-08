@@ -6,7 +6,9 @@
   "devDependencies": {
     "gulp": "*",
     "gulp-autoprefixer": "*",
+    "gulp-data": "*",
     "gulp-load-plugins": "*",
+    "gulp-jade": "*",
     "gulp-ruby-sass": "1.0.0-alpha"
   }
 }
