@@ -111,6 +111,7 @@ gulp.task('sass', function() {
 // STYLE GUIDE
 // - - - - - - - - - - - - - - -
 
+// generate style guide with kss
 
 // IMAGE
 // - - - - - - - - - - - - - - -
@@ -153,10 +154,6 @@ gulp.task('js', function() {
     .pipe($.uglify())
     .pipe(gulp.dest('./shared/js/'));
 });
-
-
-// WATCH
-// - - - - - - - - - - - - - - -
 
 
 // PRODUCTION

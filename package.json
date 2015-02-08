@@ -15,6 +15,7 @@
     "gulp-load-plugins": "*",
     "gulp-imagemin": "*",
     "gulp-jade": "*",
+    "gulp-kss": "*",
     "gulp-ruby-sass": "1.0.0-alpha",
     "gulp.spritesmith": "*",
     "gulp-uglify": "*"
