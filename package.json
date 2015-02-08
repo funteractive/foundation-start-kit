@@ -5,12 +5,14 @@
   "version": "0.1.0",
   "devDependencies": {
     "browserify": "*",
+    "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-data": "*",
     "gulp-load-plugins": "*",
     "gulp-jade": "*",
-    "gulp-ruby-sass": "1.0.0-alpha"
+    "gulp-ruby-sass": "1.0.0-alpha",
+    "gulp-uglify": "^1.0.1"
   }
 }

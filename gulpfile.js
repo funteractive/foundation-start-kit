@@ -23,6 +23,7 @@
 var gulp         = require('gulp'),
   $              = require('gulp-load-plugins')(),
   browserify     = require('browserify'),
+  buffer         = require('vinyl-buffer'),
   source         = require('vinyl-source-stream')
   //rimraf         = require('rimraf'),
   //runSequence    = require('run-sequence'),
@@ -115,10 +116,12 @@ gulp.task('sass', function() {
 
 // JAVASCRIPT
 // - - - - - - - - - - - - - - -
-gulp.task('browserify', function() {
+gulp.task('js', function() {
   browserify('./shared/js/src/app.js')
     .bundle()
     .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe($.uglify())
     .pipe(gulp.dest('./shared/js/'));
 });
 
