@@ -23,6 +23,7 @@
 var gulp         = require('gulp'),
   spritesmith    = require('gulp.spritesmith'),
   $              = require('gulp-load-plugins')(),
+  browserSync    = require('browser-sync'),
   browserify     = require('browserify'),
   buffer         = require('vinyl-buffer'),
   source         = require('vinyl-source-stream')
@@ -58,14 +59,16 @@ var gulp         = require('gulp'),
 // SERVER
 // - - - - - - - - - - - - - - -
 
-// Run local server
-gulp.task('webserver', function() {
-  gulp.src('./')
-    .pipe($.webserver({
-      livereload: true,
-      directoryListing: false,
-      open: true
-    }));
+// run browser-sync
+gulp.task('browser-sync', function() {
+  browserSync({
+    server: {
+      baseDir: './'
+    },
+    ghostMode: {
+      location: true
+    }
+  });
 });
 
 
@@ -80,6 +83,7 @@ gulp.task('jade', function() {
     }))
     .pipe($.jade({ pretty: true }))
     .pipe(gulp.dest('./'))
+    .pipe(browserSync.reload({ stream:true }));
 });
 
 
@@ -98,7 +102,8 @@ gulp.task('sass', function() {
       browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
     .pipe($.csso())
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./'))
+    .pipe(browserSync.reload({ stream:true }));
 });
 
 
@@ -118,11 +123,13 @@ gulp.task('sprite', function() {
 
   // compile image
   spriteData.img
-    .pipe(gulp.dest('./shared/img/'));
+    .pipe(gulp.dest('./shared/img/'))
+    .pipe(browserSync.reload({ stream:true }));
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest('./shared/scss/'));
+    .pipe(gulp.dest('./shared/scss/'))
+    .pipe(browserSync.reload({ stream:true }));
 });
 
 
@@ -148,7 +155,7 @@ gulp.task('js', function() {
 
 // NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
-gulp.task('default', ['webserver', 'sprite'], function() {
+gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch Jade
   gulp.watch(['./shared/jade/*', './shared/jade/**/*'], ['jade']);
 
@@ -159,5 +166,5 @@ gulp.task('default', ['webserver', 'sprite'], function() {
   gulp.watch(['./shared/scss/*', './shared/scss/**/*'], ['sass']);
 
   // Watch JavaScript
-  gulp.watch(['./shared/js/src/*'], ['js']);
+  gulp.watch(['./shared/js/src/*'], ['js', browserSync.reload]);
 });

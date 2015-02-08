@@ -4,6 +4,7 @@
   "description": "funteractive start kit with jade and foundation 5",
   "version": "0.1.0",
   "devDependencies": {
+    "browser-sync": "*",
     "browserify": "*",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
@@ -15,7 +16,6 @@
     "gulp-jade": "*",
     "gulp-ruby-sass": "1.0.0-alpha",
     "gulp.spritesmith": "*",
-    "gulp-uglify": "*",
-    "gulp-webserver": "*"
+    "gulp-uglify": "*"
   }
 }
