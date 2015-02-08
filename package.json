@@ -9,13 +9,13 @@
     "vinyl-source-stream": "*",
     "gulp": "*",
     "gulp-autoprefixer": "*",
-    "gulp-connect": "*",
     "gulp-csso": "*",
     "gulp-data": "*",
     "gulp-load-plugins": "*",
     "gulp-jade": "*",
     "gulp-ruby-sass": "1.0.0-alpha",
     "gulp.spritesmith": "*",
-    "gulp-uglify": "*"
+    "gulp-uglify": "*",
+    "gulp-webserver": "*"
   }
 }

@@ -57,11 +57,13 @@ var gulp         = require('gulp'),
 
 // SERVER
 // - - - - - - - - - - - - - - -
-gulp.task('server:start', function() {
-  $.connect.server({
-    root: './',
-    livereload: true
-  });
+gulp.task('webserver', function() {
+  gulp.src('./')
+    .pipe($.webserver({
+      livereload: true,
+      directoryListing: true,
+      open: true
+    }));
 });
 
 
