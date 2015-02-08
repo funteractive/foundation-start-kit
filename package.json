@@ -1,7 +1,7 @@
 {
-  "name": "Funteractive",
+  "name": "jade-foundation-grunt-start-kit",
   "uri": "http://funteractive.jp/",
-  "description": "funteractive start theme",
+  "description": "start theme with jade, foundation 5 and grunt",
   "version": "0.0.1",
   "devDependencies": {
     "grunt": "latest",
