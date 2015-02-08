@@ -54,6 +54,15 @@ var gulp         = require('gulp'),
 //});
 
 
+// SERVER
+// - - - - - - - - - - - - - - -
+gulp.task('server:start', function() {
+  $.connect.server({
+    root: './',
+    livereload: true
+  });
+});
+
 
 // JADE
 // - - - - - - - - - - - - - - -
