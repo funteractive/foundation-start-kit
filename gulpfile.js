@@ -92,10 +92,11 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return $.rubySass('./shared/scss/style.scss', {
-      loadPath: ['scss'],
+  return $.rubySass('./shared/scss/', {
       style: 'nested',
-      bundleExec: false
+      bundleExec: false,
+      require: 'sass-globbing',
+      sourcemap: true
     })
     .on('error', function(err) { console.error('Error!', err.message); })
     .pipe($.autoprefixer({
@@ -132,7 +133,7 @@ gulp.task('sprite', function() {
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest('./shared/scss/'))
+    .pipe(gulp.dest('./shared/scss/layout/'))
     .pipe(browserSync.reload({ stream:true }));
 });
 
