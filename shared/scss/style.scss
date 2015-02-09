@@ -8,18 +8,17 @@
 // ========================================
 // foundation
 // ========================================
-//@import "core/settings";
-//@import "core/foundation";
+//@import
+//  "core/settings",
+//  "core/foundation";
 //========================================
 // original config
 //========================================
-@import
-  "core/config",
-  "core/mixins";
+@import "core/mixins";
 //========================================
 // library
 //========================================
-//@import "../lib/fontawesome/scss/font-awesome";
+//@import "font-awesome";
 //========================================
 // layout
 //========================================
