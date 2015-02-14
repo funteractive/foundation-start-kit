@@ -21,7 +21,6 @@
 // - - - - - - - - - - - - - - -
 
 var gulp         = require('gulp'),
-  //spritesmith    = require('gulp.spritesmith'),
   $              = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] }),
   browserSync    = require('browser-sync'),
   browserify     = require('browserify'),
@@ -30,10 +29,6 @@ var gulp         = require('gulp'),
   runSequence    = require('run-sequence'),
   fs             = require('fs'),
   rimraf         = require('rimraf')
-  //modRewrite     = require('connect-modrewrite'),
-  //routes         = require('./bin/gulp-dynamic-routing'),
-  //merge          = require('merge-stream'),
-  //settingsParser = require('settings-parser')
   ;
 
 
