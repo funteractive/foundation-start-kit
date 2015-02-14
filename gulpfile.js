@@ -21,8 +21,8 @@
 // - - - - - - - - - - - - - - -
 
 var gulp         = require('gulp'),
-  spritesmith    = require('gulp.spritesmith'),
-  $              = require('gulp-load-plugins')(),
+  //spritesmith    = require('gulp.spritesmith'),
+  $              = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] }),
   browserSync    = require('browser-sync'),
   browserify     = require('browserify'),
   buffer         = require('vinyl-buffer'),
@@ -40,6 +40,7 @@ var gulp         = require('gulp'),
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
 var jadePath         = './shared/jade/',
+  htmlPath           = './',
   scssPath           = './shared/scss/',
   cssPath            = './',
   imgPath            = './shared/img/',
@@ -64,21 +65,10 @@ gulp.task('copy:foundation', function() {
     foundationScssPath + 'foundation.scss',
     foundationScssPath + 'foundation/_settings.scss'
   ])
-    .pipe(gulp.dest(scssPath + 'core/'));
-});
-
-// rename foundation.scss
-gulp.task('rename:foundation', function() {
-  return gulp.src(scssPath + 'core/foundation.scss')
     .pipe($.rename({
       prefix: '_'
     }))
     .pipe(gulp.dest(scssPath + 'core/'));
-});
-
-// clean original foundation.scss
-gulp.task('clean:foundation', function(cb) {
-  return rimraf(scssPath + 'core/foundation.scss', cb);
 });
 
 
@@ -108,7 +98,7 @@ gulp.task('jade', function() {
       return require(jadePath + 'setting.json')
     }))
     .pipe($.jade({ pretty: true }))
-    .pipe(gulp.dest('./'))
+    .pipe(gulp.dest(htmlPath))
     .pipe(browserSync.reload({ stream:true }));
 });
 
@@ -150,7 +140,7 @@ gulp.task('sass', function() {
 // make sprite image and css for sprite
 gulp.task('sprite', function() {
   var spriteData = gulp.src(imgPath + 'sprite/*.png')
-    .pipe(spritesmith({
+    .pipe($.spritesmith({
       imgName: 'sprite.png',
       cssName: '_sprite.scss'
     }));
@@ -195,13 +185,13 @@ gulp.task('js', function() {
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
-gulp.task('build', function() {
+gulp.task('build', ['bower'], function() {
   // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
   fs.open(scssPath + 'core/_foundation.scss', 'r', function(err, fd) {
     if (err) {
       fs.open(scssPath + 'core/_settings.scss', 'r', function(err, fd) {
         if (err) {
-          runSequence('bower', 'copy:foundation', 'rename:foundation', 'clean:foundation', function() {
+          runSequence('copy:foundation', function() {
             console.log('Successfully built.');
           });
         } else {
