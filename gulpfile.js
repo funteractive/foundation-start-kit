@@ -43,6 +43,7 @@ var jadePath         = './shared/jade/',
   htmlPath           = './',
   scssPath           = './shared/scss/',
   cssPath            = './',
+  styleGuidePath     = './styleguide/',
   imgPath            = './shared/img/',
   jsPath             = './shared/js/',
   bowerPath          = './bower_components/',
@@ -131,7 +132,20 @@ gulp.task('sass', function() {
 // STYLE GUIDE
 // - - - - - - - - - - - - - - -
 
-// generate style guide with kss
+// Generate style guide with kss
+gulp.task('styleguide', function() {
+  // Copy css for style guide
+  gulp.src(cssPath + 'style.css')
+    .pipe(gulp.dest(styleGuidePath));
+
+  // Make style guide
+  gulp.src([scssPath + '*.scss', scssPath + '**/*.scss'])
+    .pipe($.kss({
+      overview: scssPath + 'styleguide.md',
+      templateDirectory: styleGuidePath + 'template/'
+    }))
+    .pipe(gulp.dest(styleGuidePath));
+});
 
 
 // IMAGE

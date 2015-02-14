@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -7,13 +7,8 @@
 	<meta name="viewport" content="width=device-width">
 	<meta name="description" content="" />
 	<meta name="generator" content="kss-node" />
-	<!--
-	  <link rel="stylesheet" href="public/kss.css" />
-	  <link rel="stylesheet" href="public/style.css" />
-	  -->
-	<link rel="stylesheet/less" type="text/css" href="template/public/kss.less" />
-	<link rel="stylesheet" href="public/style.css" />
-	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+	<link rel="stylesheet" href="public/kss.css" />
+	<link rel="stylesheet" href="style.css" />
 	<!--[if lt IE 9]>
 	<script src="public/html5shiv.js"></script>
 	<![endif]-->
@@ -21,15 +16,15 @@
 <body id="mknt">
 <div class="mknt-l-outside">
 	<header class="mknt-l-header">
-		<h1 class="mknt-siteId">STYLE GUIDE</h1>
+		<h1 class="mknt-siteId">KSS STYLE GUIDE</h1>
 		<a class="mknt-openMenu" href="#">open</a>
 	</header>
 
 	<div class="mknt-menu">
 		<a class="mknt-menu__close" href="#">close</a>
-		<nav class="mknt-nav">
-			<ul class="mknt-nav--parent" data-kss-ref="{{rootNumber}}">
-				<li class="mknt-nav__item mknt-nav__item--parent"><a href="./"><span class="mknt-nav__ref">0</span><span class="mknt-nav__name">Overview</span></a></li>
+		<nav class="mknt-nav" data-kss-ref="{{rootNumber}}">
+			<ul class="mknt-nav__parent">
+				<li class="mknt-nav__item mknt-nav__item--parent"><a href="./index.html"><span class="mknt-nav__ref">0</span><span class="mknt-nav__name">Overview</span></a></li>
 				{{#eachRoot}}
 				<li class="mknt-nav__item mknt-nav__item--parent"><a href="section-{{reference}}.html"><span class="mknt-nav__ref">{{reference}}</span><span class="mknt-nav__name">{{header}}</span></a></li>
 				{{/eachRoot}}
@@ -102,6 +97,6 @@
 <!--[if gt IE 8]><!-->
 <script src="public/rainbow.min.js"></script>
 <!--<![endif]-->
-<script src="template/public/main.js"></script>
+<script src="public/main.js"></script>
 </body>
 </html>

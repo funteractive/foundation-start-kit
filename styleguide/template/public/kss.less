@@ -26,23 +26,35 @@ body {
     margin: 0 auto;
   }
 }
+.clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+    font-size:0;
+  }
+}
 
 //
 // layout
 //
+#mknt {
+  background: #fff;
+}
 .mknt-l-header {
-  padding: 10px 5%;
+  padding: 10px 2%;
 }
 
 .mknt-l-content {
   clear: both;
   max-width: @baseWidth;
   margin: 0 auto;
-  padding-top: 40px;
+  padding: 40px 2% 0;
 }
 
 .mknt-l-footer {
-
 }
 
 //
@@ -84,20 +96,34 @@ body {
 .mknt-nav {
   .mknt-nav__item {
     font-size: 14px;
+    list-style: none;
+    &.mknt-nav__item--active a {
+      color: #fff;
+    }
     a {
       color: #aaa;
-      padding: 4px 0px;
+      padding: 4px 0;
       display: block;
       transition-property: color;
       transition-duration: .2s;
+      text-decoration: none;
       &:hover {
         color: #fff;
+        text-decoration: none;
       }
     }
+  }
+  .mknt-nav__parent {
+    margin: 0;
   }
   .mknt-nav__ref {
     display: inline-block;
     min-width: 3em;
+  }
+  .mknt-nav__child {
+    .mknt-nav__item {
+      font-size: 12px;
+    }
   }
 }
 
@@ -135,8 +161,11 @@ body {
 
 // html block
 .mknt-block {
+  .mknt-block__example {
+    .clearfix;
+  }
   .mknt-block__markup {
-    .responsivePadding;
+    //.responsivePadding;
     margin-top: 40px;
     padding: 25px;
     background: #f8f8fb;
@@ -153,13 +182,17 @@ body {
       font-weight: normal;
       font-family: Consolas,"Liberation Mono",Courier, monospace,"ＭＳ Ｐ ゴシック","MS PGothic","ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro",sans-serif;
       color: #333;
+      border: none;
+      background: transparent;
+      word-wrap: break-word;
+      word-break: break-all;
     }
   }
 }
 
 // html modifier
 .mknt-modifier {
-  margin-top: 20px;
+  margin-top: 30px;
   .mknt-modifier__head {
     font-size: 14px;
     color: @colorSubTxt;
@@ -167,8 +200,10 @@ body {
       font-size: 14px;
     }
   }
-
   .mknt-modifier__name {
     margin-bottom: 4px;
+  }
+  .mknt-modifier__description {
+    margin-bottom: 20px;
   }
 }
