@@ -26,9 +26,9 @@ var gulp         = require('gulp'),
   browserSync    = require('browser-sync'),
   browserify     = require('browserify'),
   buffer         = require('vinyl-buffer'),
-  source         = require('vinyl-source-stream')
-  //rimraf         = require('rimraf'),
-  //runSequence    = require('run-sequence'),
+  source         = require('vinyl-source-stream'),
+  runSequence    = require('run-sequence'),
+  rimraf         = require('rimraf')
   //modRewrite     = require('connect-modrewrite'),
   //routes         = require('./bin/gulp-dynamic-routing'),
   //merge          = require('merge-stream'),
@@ -39,27 +39,35 @@ var gulp         = require('gulp'),
 // BUILD
 // - - - - - - - - - - - - - - -
 
-// install libraries with Bower
+// Install libraries with Bower
 gulp.task('bower', function() {
   return $.bower()
     .pipe(gulp.dest('bower_components/'));
 });
 
-// Generate Sass settings file
-//gulp.task('settings', function() {
-//  return settingsParser([
-//    'scss/_includes.scss',
-//    'scss/_global.scss',
-//    'scss/helpers/_breakpoints.scss',
-//    'scss/components/_typography.scss',
-//    'scss/components/_grid.scss',
-//    'scss/components/*.scss'
-//  ], {
-//    title: 'Foundation for Apps Settings'.toUpperCase(),
-//    partialsPath: 'build/partials/scss',
-//    settingsPath: 'scss'
-//  });
-//});
+// copy foundation files
+gulp.task('copy:foundation', function() {
+  var foundationPath = 'bower_components/foundation/scss/';
+  return gulp.src([
+    foundationPath + 'foundation.scss',
+    foundationPath + 'foundation/_settings.scss'
+  ])
+    .pipe(gulp.dest('./shared/scss/core/'));
+});
+
+// rename foundation.scss
+gulp.task('rename:foundation', ['copy:foundation'], function() {
+  return gulp.src('./shared/scss/core/foundation.scss')
+    .pipe($.rename({
+      prefix: '_'
+    }))
+    .pipe(gulp.dest('./shared/scss/core/'));
+});
+
+// clean original foundation.scss
+gulp.task('clean:foundation', ['rename:foundation'], function(cb) {
+  rimraf('./shared/scss/core/foundation.scss', cb);
+});
 
 
 // SERVER
@@ -98,10 +106,12 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return $.rubySass('./shared/scss/style.scss', {
-      loadPath: ['scss'],
+  return $.rubySass('./shared/scss/', {
+      loadPath: ['bower_components/foundation/scss', 'bower_components/fontawesome/scss'],
       style: 'nested',
-      bundleExec: false
+      bundleExec: false,
+      require: 'sass-globbing',
+      sourcemap: true
     })
     .on('error', function(err) { console.error('Error!', err.message); })
     .pipe($.autoprefixer({
@@ -118,6 +128,7 @@ gulp.task('sass', function() {
 // - - - - - - - - - - - - - - -
 
 // generate style guide with kss
+
 
 // IMAGE
 // - - - - - - - - - - - - - - -
@@ -138,7 +149,7 @@ gulp.task('sprite', function() {
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest('./shared/scss/'))
+    .pipe(gulp.dest('./shared/scss/layout/'))
     .pipe(browserSync.reload({ stream:true }));
 });
 
@@ -168,6 +179,13 @@ gulp.task('js', function() {
 
 // NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
+
+// Build the documentation once
+gulp.task('build', function() {
+  runSequence('bower', 'copy:foundation', 'rename:foundation', 'clean:foundation', function() {
+    console.log('Successfully built.');
+  })
+});
 
 // default tasks
 gulp.task('default', ['browser-sync', 'sprite'], function() {

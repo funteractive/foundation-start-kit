@@ -8,28 +8,23 @@
 // ========================================
 // foundation
 // ========================================
-//@import "core/settings";
-//@import "core/foundation";
+//@import
+//  "core/settings",
+//  "core/foundation";
 //========================================
 // original config
 //========================================
-@import
-  "core/config",
-  "core/mixins",
-  "sprite";
+@import "core/mixins";
 //========================================
 // library
 //========================================
-//@import "../lib/fontawesome/scss/font-awesome";
+//@import "font-awesome";
 //========================================
 // layout
 //========================================
-@import
-  "layout/layout",
-  "layout/header",
-  "layout/footer";
+@import "layout/*.*";
 
 //========================================
 // module
 //======================================== */
-//@import "module/*.*";
+@import "module/*.*";

@@ -8,6 +8,8 @@
     "browserify": "*",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
+    "run-sequence": "*",
+    "rimraf": "*",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-bower": "*",
@@ -17,6 +19,7 @@
     "gulp-imagemin": "*",
     "gulp-jade": "*",
     "gulp-kss": "*",
+    "gulp-rename": "*",
     "gulp-ruby-sass": "1.0.0-alpha",
     "gulp.spritesmith": "*",
     "gulp-uglify": "*"
