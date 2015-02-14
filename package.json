@@ -3,9 +3,15 @@
   "uri": "https://funteractive.jp/",
   "description": "funteractive start kit with jade and foundation 5",
   "version": "0.1.0",
+  "browserify": {
+    "transform": [
+      "debowerify"
+    ]
+  },
   "devDependencies": {
     "browser-sync": "*",
     "browserify": "*",
+    "fs-extra": "*",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
     "run-sequence": "*",

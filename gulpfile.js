@@ -28,11 +28,24 @@ var gulp         = require('gulp'),
   buffer         = require('vinyl-buffer'),
   source         = require('vinyl-source-stream'),
   runSequence    = require('run-sequence'),
+  fs             = require('fs'),
   rimraf         = require('rimraf')
   //modRewrite     = require('connect-modrewrite'),
   //routes         = require('./bin/gulp-dynamic-routing'),
   //merge          = require('merge-stream'),
   //settingsParser = require('settings-parser')
+  ;
+
+
+// 2. VARIABLES
+// - - - - - - - - - - - - - - -
+var jadePath         = './shared/jade/',
+  scssPath           = './shared/scss/',
+  cssPath            = './',
+  imgPath            = './shared/img/',
+  jsPath             = './shared/js/',
+  bowerPath          = './bower_components/',
+  foundationScssPath = bowerPath + 'foundation/scss/'
   ;
 
 
@@ -42,38 +55,37 @@ var gulp         = require('gulp'),
 // Install libraries with Bower
 gulp.task('bower', function() {
   return $.bower()
-    .pipe(gulp.dest('bower_components/'));
+    .pipe(gulp.dest(bowerPath));
 });
 
 // copy foundation files
 gulp.task('copy:foundation', function() {
-  var foundationPath = 'bower_components/foundation/scss/';
   return gulp.src([
-    foundationPath + 'foundation.scss',
-    foundationPath + 'foundation/_settings.scss'
+    foundationScssPath + 'foundation.scss',
+    foundationScssPath + 'foundation/_settings.scss'
   ])
-    .pipe(gulp.dest('./shared/scss/core/'));
+    .pipe(gulp.dest(scssPath + 'core/'));
 });
 
 // rename foundation.scss
-gulp.task('rename:foundation', ['copy:foundation'], function() {
-  return gulp.src('./shared/scss/core/foundation.scss')
+gulp.task('rename:foundation', function() {
+  return gulp.src(scssPath + 'core/foundation.scss')
     .pipe($.rename({
       prefix: '_'
     }))
-    .pipe(gulp.dest('./shared/scss/core/'));
+    .pipe(gulp.dest(scssPath + 'core/'));
 });
 
 // clean original foundation.scss
-gulp.task('clean:foundation', ['rename:foundation'], function(cb) {
-  rimraf('./shared/scss/core/foundation.scss', cb);
+gulp.task('clean:foundation', function(cb) {
+  return rimraf(scssPath + 'core/foundation.scss', cb);
 });
 
 
 // SERVER
 // - - - - - - - - - - - - - - -
 
-// run browser-sync
+// Run browser-sync
 gulp.task('browser-sync', function() {
   browserSync({
     server: {
@@ -91,9 +103,9 @@ gulp.task('browser-sync', function() {
 
 // Compile Jade to HTML
 gulp.task('jade', function() {
-  return gulp.src('./shared/jade/*.jade')
+  return gulp.src(jadePath + '*.jade')
     .pipe($.data(function(file) {
-      return require('./shared/jade/setting.json')
+      return require(jadePath + 'setting.json')
     }))
     .pipe($.jade({ pretty: true }))
     .pipe(gulp.dest('./'))
@@ -106,8 +118,8 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return $.rubySass('./shared/scss/', {
-      loadPath: ['bower_components/foundation/scss', 'bower_components/fontawesome/scss'],
+  return $.rubySass(scssPath, {
+      loadPath: [bowerPath + 'foundation/scss', bowerPath + 'fontawesome/scss'],
       style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
@@ -118,7 +130,7 @@ gulp.task('sass', function() {
       browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
     .pipe($.csso())
-    .pipe(gulp.dest('./'))
+    .pipe(gulp.dest(cssPath))
     .pipe(browserSync.reload({ stream:true }));
 });
 
@@ -135,7 +147,7 @@ gulp.task('sass', function() {
 
 // make sprite image and css for sprite
 gulp.task('sprite', function() {
-  var spriteData = gulp.src('./shared/img/sprite/*.png')
+  var spriteData = gulp.src(imgPath + 'sprite/*.png')
     .pipe(spritesmith({
       imgName: 'sprite.png',
       cssName: '_sprite.scss'
@@ -144,32 +156,32 @@ gulp.task('sprite', function() {
   // compile image
   spriteData.img
     .pipe($.imagemin())
-    .pipe(gulp.dest('./shared/img/'))
+    .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest('./shared/scss/layout/'))
+    .pipe(gulp.dest(scssPath + 'layout/'))
     .pipe(browserSync.reload({ stream:true }));
 });
 
 // optimize images
 gulp.task('imagemin', function() {
-  return gulp.src('./shared/img/**/*.+(jpg|jpeg|png|gif|svg)')
+  return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
     .pipe($.imagemin())
-    .pipe(gulp.dest('./shared/img/'))
+    .pipe(gulp.dest(imgPath))
 });
 
 
 // JAVASCRIPT
 // - - - - - - - - - - - - - - -
 gulp.task('js', function() {
-  browserify('./shared/js/src/app.js')
+  browserify(jsPath + 'src/app.js')
     .bundle()
     .pipe(source('build.js'))
     .pipe(buffer())
     .pipe($.uglify())
-    .pipe(gulp.dest('./shared/js/'));
+    .pipe(gulp.dest(jsPath));
 });
 
 
@@ -182,24 +194,39 @@ gulp.task('js', function() {
 
 // Build the documentation once
 gulp.task('build', function() {
-  runSequence('bower', 'copy:foundation', 'rename:foundation', 'clean:foundation', function() {
-    console.log('Successfully built.');
-  })
+  // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
+  fs.open(scssPath + 'core/_foundation.scss', 'r', function(err, fd) {
+    if (err) {
+      fs.open(scssPath + 'core/_settings.scss', 'r', function(err, fd) {
+        if (err) {
+          runSequence('bower', 'copy:foundation', 'rename:foundation', 'clean:foundation', function() {
+            console.log('Successfully built.');
+          });
+        } else {
+          console.log('"_settings.scss" is always exist!');
+        }
+        fd && fs.close(fd, function(err) { });
+      });
+    } else {
+      console.log('"_foundation.scss" is always exist!');
+    }
+    fd && fs.close(fd, function(err) { });
+  });
 });
 
 // default tasks
 gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch Jade
-  gulp.watch(['./shared/jade/*', './shared/jade/**/*'], ['jade']);
+  gulp.watch([jadePath + '*', jadePath + '**/*'], ['jade']);
 
   // Watch Sprite
-  gulp.watch(['./shared/img/sprite/*.png'], ['sprite']);
+  gulp.watch([imgPath + 'sprite/*.png'], ['sprite']);
 
   // Watch Sass
-  gulp.watch(['./shared/scss/*', './shared/scss/**/*'], ['sass']);
+  gulp.watch([scssPath + '*', scssPath + '**/*'], ['sass']);
 
   // Watch JavaScript
-  gulp.watch(['./shared/js/src/*'], ['js', browserSync.reload]);
+  gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
 
 // when before distribute, 'dist' task will be pursued.
