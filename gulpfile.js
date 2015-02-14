@@ -2,19 +2,17 @@
 
 // Funteractive start up theme
 //
-// We use this Gulpfile to assemble the documentation, run unit tests,
-// and deploy changes to the live documentation and CDN.
 //
 // The tasks are grouped into these categories:
 //   1. Libraries
 //   2. Variables
-//   3. Cleaning files
-//   4. Copying files
-//   5. Stylesheets
-//   6. JavaScript
-//   7. Testing
-//   8. Server
-//   9. Deployment
+//   3. Build tasks
+//   4. Running server
+//   5. Jade
+//   6. Stylesheet
+//   7. Style guide
+//   8. Image
+//   9. JavaScript
 //  10. Default tasks
 
 // 1. LIBRARIES
@@ -42,11 +40,13 @@ var jadePath         = './shared/jade/',
   imgPath            = './shared/img/',
   jsPath             = './shared/js/',
   bowerPath          = './bower_components/',
-  foundationScssPath = bowerPath + 'foundation/scss/'
+  foundationScssPath = bowerPath + 'foundation/scss/',
+  bsProxy = false
   ;
 
 
-// BUILD
+
+// 3. BUILD
 // - - - - - - - - - - - - - - -
 
 // Install libraries with Bower
@@ -68,7 +68,7 @@ gulp.task('copy:foundation', function() {
 });
 
 
-// SERVER
+// 4. SERVER
 // - - - - - - - - - - - - - - -
 
 // Run browser-sync
@@ -77,6 +77,7 @@ gulp.task('browser-sync', function() {
     server: {
       baseDir: './'
     },
+    proxy: bsProxy,
     ghostMode: {
       location: true
     }
@@ -84,7 +85,7 @@ gulp.task('browser-sync', function() {
 });
 
 
-// JADE
+// 5. JADE
 // - - - - - - - - - - - - - - -
 
 // Compile Jade to HTML
@@ -99,7 +100,7 @@ gulp.task('jade', function() {
 });
 
 
-// STYLESHEET
+// 6. STYLESHEET
 // - - - - - - - - - - - - - - -
 
 // Compile stylesheets with Ruby Sass
@@ -124,7 +125,7 @@ gulp.task('sass', function() {
 
 
 
-// STYLE GUIDE
+// 7. STYLE GUIDE
 // - - - - - - - - - - - - - - -
 
 // Generate style guide with kss
@@ -143,7 +144,7 @@ gulp.task('styleguide', function() {
 });
 
 
-// IMAGE
+// 8. IMAGE
 // - - - - - - - - - - - - - - -
 
 // make sprite image and css for sprite
@@ -154,7 +155,7 @@ gulp.task('sprite', function() {
       cssName: '_sprite.scss'
     }));
 
-  // compile image
+  // minify images
   spriteData.img
     .pipe($.imagemin())
     .pipe(gulp.dest(imgPath))
@@ -174,7 +175,7 @@ gulp.task('imagemin', function() {
 });
 
 
-// JAVASCRIPT
+// 9. JAVASCRIPT
 // - - - - - - - - - - - - - - -
 gulp.task('js', function() {
   browserify(jsPath + 'src/app.js')
@@ -186,11 +187,7 @@ gulp.task('js', function() {
 });
 
 
-// PRODUCTION
-// - - - - - - - - - - - - - - -
-
-
-// NOW BRING IT TOGETHER
+// 10. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
