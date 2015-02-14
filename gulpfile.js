@@ -123,13 +123,15 @@ gulp.task('sass', function() {
       style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
-      sourcemap: true
+      sourcemap: false
     })
     .on('error', function(err) { console.error('Error!', err.message); })
     .pipe($.autoprefixer({
       browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
+    .pipe($.csscomb())
     .pipe($.csso())
+    .pipe($.csslint())
     .pipe(gulp.dest(cssPath))
     .pipe(browserSync.reload({ stream:true }));
 });
@@ -214,7 +216,7 @@ gulp.task('build', function() {
   });
 });
 
-// default tasks
+// Default tasks
 gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch Jade
   gulp.watch([jadePath + '*', jadePath + '**/*'], ['jade']);
@@ -229,5 +231,5 @@ gulp.task('default', ['browser-sync', 'sprite'], function() {
   gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
 
-// when before distribute, 'dist' task will be pursued.
+// When before distribute, 'dist' task will be executed.
 gulp.task('dist', ['jade', 'sass', 'js', 'sprite', 'imagemin']);

@@ -19,6 +19,8 @@
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-bower": "*",
+    "gulp-csscomb": "*",
+    "gulp-csslint": "*",
     "gulp-csso": "*",
     "gulp-data": "*",
     "gulp-load-plugins": "*",
