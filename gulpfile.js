@@ -137,7 +137,7 @@ gulp.task('styleguide', function() {
   // Make style guide
   gulp.src([scssPath + '*.scss', scssPath + '**/*.scss'])
     .pipe($.kss({
-      overview: scssPath + 'styleguide.md',
+      overview: styleGuidePath + 'styleguide.md',
       templateDirectory: styleGuidePath + 'template/'
     }))
     .pipe(gulp.dest(styleGuidePath));
