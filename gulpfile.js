@@ -55,7 +55,7 @@ gulp.task('bower', function() {
     .pipe(gulp.dest(bowerPath));
 });
 
-// copy foundation files
+// Copy foundation files
 gulp.task('copy:foundation', function() {
   return gulp.src([
     foundationScssPath + 'foundation.scss',
