@@ -13,7 +13,8 @@
 //   7. Style guide
 //   8. Image
 //   9. JavaScript
-//  10. Default tasks
+//  10. WordPress
+//  11. Tasks
 
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
@@ -25,8 +26,7 @@ var gulp         = require('gulp'),
   buffer         = require('vinyl-buffer'),
   source         = require('vinyl-source-stream'),
   runSequence    = require('run-sequence'),
-  fs             = require('fs'),
-  rimraf         = require('rimraf')
+  fs             = require('fs')
   ;
 
 
