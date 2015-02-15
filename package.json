@@ -21,6 +21,8 @@
     "gulp-csscomb": "*",
     "gulp-csslint": "*",
     "gulp-csso": "*",
+    "gulp-concat": "*",
+    "gulp-concat-css": "*",
     "gulp-data": "*",
     "gulp-load-plugins": "*",
     "gulp-imagemin": "*",

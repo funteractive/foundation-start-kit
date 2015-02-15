@@ -1,16 +1,13 @@
 @charset "UTF-8";
-/*
- Theme Name: Funteractive
- Theme URI: http://funteractive.jp/
- Description: funteractive start theme
- Version: 0.1.0
-*/
 // ========================================
 // foundation
 // ========================================
-@import
-  "core/_settings",
-  "core/foundation";
+@import "core/_settings";
+@import "core/foundation";
+//========================================
+// sprite
+//========================================
+//@import "core/sprite";
 //========================================
 // original config
 //========================================

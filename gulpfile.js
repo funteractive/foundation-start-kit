@@ -44,6 +44,35 @@ var jadePath         = './shared/jade/',
   bsProxy = false
   ;
 
+// For WordPress theme style.css comment : This is optional function.
+var wpThemeName      = 'Your Theme Name',
+  wpThemeUri         = 'Your Theme URI',
+  wpThemeAuthor      = 'Your Theme Author',
+  wpThemeAuthorUri   = 'Your Theme Author URI',
+  wpThemeDescription = 'Your Theme Description',
+  wpThemeVersion     = 'Your Theme Version',
+  wpThemeLicense     = 'Your Theme License',
+  wpThemeLicenseUri  = 'Your Theme License URI',
+  wpThemeTag         = 'Your Theme Tags',
+  wpThemeTextDomain  = 'Your Theme Text Domain',
+  wpThemeOption      = '',
+  wpThemeInfo
+  ;
+// When you make WordPress theme, activate this comment.
+//wpThemeInfo = '@charset "UTF-8";\n'
+//  + '/*\n'
+//  + ' Theme Name: ' + wpThemeName + '\n'
+//  + ' Theme URI: ' + wpThemeUri + '\n'
+//  + ' Author: ' + wpThemeAuthor + '\n'
+//  + ' Author URI: ' + wpThemeAuthorUri + '\n'
+//  + ' Description: ' + wpThemeDescription + '\n'
+//  + ' Version: ' + wpThemeVersion + '\n'
+//  + ' Theme License: ' + wpThemeLicense + '\n'
+//  + ' License URI: ' + wpThemeLicenseUri + '\n'
+//  + ' Tags: ' + wpThemeTag + '\n'
+//  + ' Text Domain: ' + wpThemeTextDomain + '\n'
+//  + wpThemeOption
+//  + '*/\n';
 
 
 // 3. BUILD
@@ -119,8 +148,23 @@ gulp.task('sass', function() {
     .pipe($.csscomb())
     .pipe($.csso())
     .pipe($.csslint())
-    .pipe(gulp.dest(cssPath))
-    .pipe(browserSync.reload({ stream:true }));
+    .pipe(gulp.dest(cssPath));
+});
+
+// Add comment for initialize WordPress theme at the beginning of style.css.
+gulp.task('wp:comment', function() {
+  fs.open(cssPath + 'style.css', 'r', function(err, fd) {
+    if(!err) {
+      gulp.src([cssPath + 'wp-theme-info.css', cssPath + 'style.css'])
+        .pipe($.concat('style.css'))
+        .pipe(gulp.dest(cssPath));
+    }
+    fd && fs.close(fd, function(err) { });
+  });
+});
+
+gulp.task('css', function() {
+  runSequence('sass', 'wp:comment');
 });
 
 
@@ -163,7 +207,7 @@ gulp.task('sprite', function() {
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest(scssPath + 'layout/'))
+    .pipe(gulp.dest(scssPath + 'core/'))
     .pipe(browserSync.reload({ stream:true }));
 });
 
@@ -187,7 +231,22 @@ gulp.task('js', function() {
 });
 
 
-// 10. NOW BRING IT TOGETHER
+// 10. WORDPRESS
+// - - - - - - - - - - - - - - -
+
+// Make a file for WordPress comment to be initialized by theme.
+function makeWpThemeInfoFile() {
+  if(wpThemeInfo) {
+    fs.writeFile(cssPath + 'wp-theme-info.css', wpThemeInfo);
+  }
+}
+
+gulp.task('wp:css', function() {
+  makeWpThemeInfoFile();
+});
+
+
+// 11. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
@@ -210,6 +269,8 @@ gulp.task('build', ['bower'], function() {
     }
     fd && fs.close(fd, function(err) { });
   });
+
+  makeWpThemeInfoFile();
 });
 
 // Default tasks
@@ -221,11 +282,11 @@ gulp.task('default', ['browser-sync', 'sprite'], function() {
   gulp.watch([imgPath + 'sprite/*.png'], ['sprite']);
 
   // Watch Sass
-  gulp.watch([scssPath + '*', scssPath + '**/*'], ['sass']);
+  gulp.watch([scssPath + '*', scssPath + '**/*'], ['css', browserSync.reload]);
 
   // Watch JavaScript
   gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
 
 // When before distribute, 'dist' task will be executed.
-gulp.task('dist', ['jade', 'sass', 'js', 'sprite', 'imagemin']);
+gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
