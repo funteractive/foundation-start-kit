@@ -59,20 +59,20 @@ var wpThemeName      = 'Your Theme Name',
   wpThemeInfo
   ;
 // When you make WordPress theme, activate this comment.
-wpThemeInfo = '@charset "UTF-8";\n'
-  + '/*\n'
-  + ' Theme Name: ' + wpThemeName + '\n'
-  + ' Theme URI: ' + wpThemeUri + '\n'
-  + ' Author: ' + wpThemeAuthor + '\n'
-  + ' Author URI: ' + wpThemeAuthorUri + '\n'
-  + ' Description: ' + wpThemeDescription + '\n'
-  + ' Version: ' + wpThemeVersion + '\n'
-  + ' Theme License: ' + wpThemeLicense + '\n'
-  + ' License URI: ' + wpThemeLicenseUri + '\n'
-  + ' Tags: ' + wpThemeTag + '\n'
-  + ' Text Domain: ' + wpThemeTextDomain + '\n'
-  + wpThemeOption
-  + '*/\n';
+//wpThemeInfo = '@charset "UTF-8";\n'
+//  + '/*\n'
+//  + ' Theme Name: ' + wpThemeName + '\n'
+//  + ' Theme URI: ' + wpThemeUri + '\n'
+//  + ' Author: ' + wpThemeAuthor + '\n'
+//  + ' Author URI: ' + wpThemeAuthorUri + '\n'
+//  + ' Description: ' + wpThemeDescription + '\n'
+//  + ' Version: ' + wpThemeVersion + '\n'
+//  + ' Theme License: ' + wpThemeLicense + '\n'
+//  + ' License URI: ' + wpThemeLicenseUri + '\n'
+//  + ' Tags: ' + wpThemeTag + '\n'
+//  + ' Text Domain: ' + wpThemeTextDomain + '\n'
+//  + wpThemeOption
+//  + '*/\n';
 
 
 // 3. BUILD
