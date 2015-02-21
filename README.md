@@ -1,29 +1,25 @@
 # 本ガイドラインについて
-このガイドラインは、ファンタラクティブ株式会社がWebサイト制作を行う際のルールを定めたものです。
+Jade, Foundation with Sass, Browserify, BrowserSync, KSSを用いたWeb制作のスターターキットです。
 新規Webサイト制作や、既存ページの修正・更新におけるクオリティー・メンテナンスの向上を目的としています。
 
 ***
 
 # 制作にあたって
-バージョン管理システム、CSSプリプロセッサー、タスクランナーを使用する。
 必要なモジュール/ソフトは以下に記載。予め、homebrew等でインストールしておくこと。
 
 - node.js
-- ruby
 - git
-- grunt/gulp
-- jade
-- Sass 3.3
-- Compass 1.0.0.alpha
+- gulp
+- Sass 3.4
 
 ***
 
 # テンプレートセット
 
-bitbucket上にあるスタートテンプレートセットをcloneして使用する
+GitHub上にあるスタートテンプレートセットをcloneして使用する
 ~~~~
 # clone
-git clone https://USERID@bitbucket.org/funteractive/foundation-start.git
+git clone git@github.com:funteractive/foundation-start-kit.git
 ~~~~
 
 パッケージインストール
@@ -32,12 +28,14 @@ git clone https://USERID@bitbucket.org/funteractive/foundation-start.git
 npm install
 ~~~~
 
-gruntスタート
+gulpタスク
 ~~~~
-# bower install
-grunt build
-# grunt watch
-grunt
+# 初回のみ
+gulp build
+# 監視タスク
+gulp
+# デプロイ用ファイル準備タスク
+gulp dist
 ~~~~
 
 ***
@@ -55,54 +53,44 @@ grunt
 
 ~~~~
 .
-└── foundation-start
-    ├── Gruntfile.js
-    ├── bower.json
-    ├── config.rb
-    ├── doc
-    ├── package.json
-    ├── setting.json
-    └── shared
-        ├── img
-        │   ├── page
-        │   ├── site
-        │   └── sprite
-        ├── jade
-        │   ├── inc
-        │   │   ├── core
-        │   │   │   ├── _base_legacy.jade
-        │   │   │   ├── _config.jade
-        │   │   │   └── _mixin.jade
-        │   │   ├── layout
-        │   │   │   ├── _footer.jade
-        │   │   │   └── _header.jade
-        │   │   └── module
-        │   │       └── _sns.jade
-        │   └── index.jade
-        ├── js
-        │   ├── lib
-        │   ├── app
-        │   │   └── script.js
-        │   ├── lib.min.js
-        │   └── script.min.js
-        └── scss
-            ├── core
-            │   ├── _config.scss
-            │   ├── _default.scss
-            │   ├── _foundation.scss
-            │   ├── _functions.scss
-            │   ├── _mixins.scss
-            │   └── _settings.scss
-            ├── layout
-            │   ├── _footer.scss
-            │   ├── _header.scss
-            │   └── _layout.scss
-            ├── module
-            │   ├── _buttons.scss
-            │   ├── _icons.scss
-            │   ├── _grid.scss
-            │   └── _helper.scss
-            └── style.scss
+├── README.md
+├── bower.json
+├── gulpfile.js
+├── package.json
+├── shared
+│   ├── img
+│   │   ├── page
+│   │   ├── site
+│   │   └── sprite
+│   ├── jade
+│   │   ├── inc
+│   │   │   ├── core
+│   │   │   │   ├── _base.jade
+│   │   │   │   ├── _config.jade
+│   │   │   │   └── _mixin.jade
+│   │   │   ├── layout
+│   │   │   │   ├── _footer.jade
+│   │   │   │   └── _header.jade
+│   │   │   └── module
+│   │   ├── index.jade
+│   │   └── setting.json
+│   ├── js
+│   │   └── src
+│   │       └── app.js
+│   └── scss
+│       ├── core
+│       │   └── _mixins.scss
+│       ├── layout
+│       │   ├── _footer.scss
+│       │   ├── _header.scss
+│       │   └── _layout.scss
+│       ├── module
+│       ├── style.scss
+└── styleguide
+    ├── template
+    │   ├── index.html
+    │   ├── public
+    └── styleguide.md
 ~~~~
 
 ***
@@ -149,7 +137,7 @@ HTMLファイル、ディレクトリ、画像ファイル及びCSS（ID及びCL
 
 - HTMLタグは必ず小文字で記述する。
 - 終了タグは必ず記述する。
-- Alt属性は必ず記述する。適切な文言がない場合はNull値とします。
+- Alt属性は必ず記述する。適切な文言がない場合はNull値とする。
 - HTMLファイル内では基本的にHTMLのみのマークアップ行い、視覚表現（装飾やアニメーション）は外部ファイル化したCSS、JavaScriptで行う。
 - スタイル目的のIDセレクタは使用しないこと。
 - CLASSセレクタの命名規則においては、レイアウト要素については、接頭詞「l-」を使用する。また、ブロック要素に対してはBEM記法を用いること。
@@ -163,9 +151,7 @@ HTMLファイル、ディレクトリ、画像ファイル及びCSS（ID及びCL
   </header>
   <div class="block">
     <h2 class="block__title">Title</h2>
-    <div class="block__description">
-      <p>Description</p>
-    </div>
+    <p class="block__description">Description</p>
   </div>
   <footer class="l-footer">
     <p class="copyright"><small>Copyright &copy; All Rights Reserved.</small></p>
@@ -182,7 +168,9 @@ CLASSセレクタの命名規則においては、BEMの命名規則を用いる
 
 > <a href="http://bem.info/method/definitions/">Definitions / Methodology / BEM. Block, Element, Modifier / BEM</a>
 
-BEMにおいて例外処理として下記に指定するルールを適用する
+- `__` BlockとElementの区切り
+
+- `--` Modifierの区切り
 
 ## Element
 
@@ -265,41 +253,24 @@ CSS
 spriteフォルダに配置した画像ファイル名を指定する
 
 ~~~~
-@include sprite-ir($name);
+@include sprite($name);
 ~~~~
 
 ### モバイル対応
-Retina対応、引数にmobileを指定する。
+別途定義済みの `r-sprite` mixinを使用
 
 ~~~~
-@include sprite-ir($name,$mobile:true);
+@include r-sprite($name);
 ~~~~
-
-###  その他
-
-| 引数       | 説明        |
-|:-----------|:------------|
-| $name      | ファイル名（拡張子除く）を指定 |
-| $spDir     | sprite-map |
-| $spUrl     | sprite-url |
-| $inline    | display:inline; |
-| $hover     | ファイル名_onの画像をhoverで表示 |
-| $center    | センター寄せ |
-| $posX      | background-position X軸（px） |
-| $posY      | background-position Y軸（px） |
-| $mobile    | Retina対応 |
-| $parent    | extend使用 |
-| $display   | display:block; 非表示 |
 
 ## JavaScript
 
 JavaScriptは動的な表現が必要な際と、外部APIなどを利用した際に使用する。
 
 - jQueryを使用する場合は、対応ブラウザによって読み込むバージョンに注意すること。
-- jQueryのバージョンは、IE8対応の場合は「1.8.2」とする。
 - オリジナルコードは、「js/app/script.js」に記載する。
 - ライブラリは、特に問題がなければ、bowerからインストールする。「bower.json」をプロジェクトごとに最適化すること。
 - ライブラリは、表示速度のパフォーマンスを考慮して、「js/lib/」以下に配置することで、タスクランナーで1ファイル化される。ただし、ライブラリによってはコンフリクトするため、その場合は別ファイル読み込みとする。
 
 
-策定　2014年7月30日
+策定　2015年2月22日

@@ -1,7 +1,0 @@
-header.l-header
-  h1.logo: +link('/','site name')
-  nav.gNav
-    ul.gNav__list
-      - var items = {top: 'Top',info: 'info',search: 'search',upload: 'upload'}
-      for val, key in items
-        li(class="gNav__item gNav__item--#{key}"): +link('',val)

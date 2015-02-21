@@ -45,6 +45,21 @@
     offcanvas.init();
 
 
+    var $menu = $('.mknt-nav');
+    var $menuItem = $menu.find('.mknt-nav__item');
+    var $childMenu = $('.mknt-nav__child');
+    var ref = $menu.data('kss-ref');
+
+      // Activate current page item
+    $menuItem.eq(ref).addClass('mknt-nav__item--active');
+
+    // Append child menu and attach scrollSpy
+    if ($childMenu.length) {
+      console.log(ref);
+      $childMenu.show().appendTo($menuItem.eq(ref));
+    }
+
+
     // Syntax hightlignting with Rainbow.js
     $('code.html').attr('data-language', 'html');
     $('code.css').attr('data-language', 'css');

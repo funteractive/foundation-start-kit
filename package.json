@@ -1,23 +1,37 @@
 {
-  "name": "Funteractive",
-  "uri": "http://funteractive.jp/",
-  "description": "funteractive start theme",
-  "version": "0.0.1",
+  "name": "jade-foundation-start-kit",
+  "uri": "https://funteractive.jp/",
+  "description": "funteractive start kit with jade and foundation 5",
+  "version": "0.1.0",
+  "browserify": {
+    "transform": [
+      "debowerify"
+    ]
+  },
   "devDependencies": {
-    "grunt": "latest",
-    "grunt-bower-task": "latest",
-    "grunt-browser-sync": "^0.9.1",
-    "grunt-contrib-cssmin": "latest",
-    "grunt-contrib-compass": "latest",
-    "grunt-autoprefixer": "latest",
-    "grunt-contrib-jshint": "latest",
-    "grunt-contrib-concat": "latest",
-    "grunt-contrib-clean": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-watch": "latest",
-    "grunt-kss": "latest",
-    "grunt-csso": "^0.6.1",
-    "grunt-contrib-jade": "^0.11.0",
-    "grunt-csscomb": "^2.0.1"
+    "browser-sync": "*",
+    "browserify": "*",
+    "debowerify": "*",
+    "vinyl-buffer": "*",
+    "vinyl-source-stream": "*",
+    "run-sequence": "*",
+    "rimraf": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-bower": "*",
+    "gulp-csscomb": "*",
+    "gulp-csslint": "*",
+    "gulp-csso": "*",
+    "gulp-concat": "*",
+    "gulp-concat-css": "*",
+    "gulp-data": "*",
+    "gulp-load-plugins": "*",
+    "gulp-imagemin": "*",
+    "gulp-jade": "*",
+    "gulp-kss": "*",
+    "gulp-rename": "*",
+    "gulp-ruby-sass": "1.0.0-alpha",
+    "gulp.spritesmith": "*",
+    "gulp-uglify": "*"
   }
 }
