@@ -41,7 +41,7 @@ var jadePath         = './shared/jade/',
   jsPath             = './shared/js/',
   bowerPath          = './bower_components/',
   foundationScssPath = bowerPath + 'foundation/scss/',
-  bsProxy = false
+  bsProxy = false // When you need proxy, write your own domain.
   ;
 
 // For WordPress theme style.css comment : This is optional function.
@@ -272,10 +272,13 @@ gulp.task('build', ['bower'], function() {
   makeWpThemeInfoFile();
 });
 
-// Default tasks
-gulp.task('default', ['browser-sync', 'sprite'], function() {
+// Watch tasks
+gulp.task('watch', function() {
   // Watch Jade
   gulp.watch([jadePath + '*', jadePath + '**/*'], ['jade']);
+
+  // Watch PHP. When you make WordPress theme, activate this.
+  //gulp.watch(['./*.php'], browserSync.reload);
 
   // Watch Sprite
   gulp.watch([imgPath + 'sprite/*.png'], ['sprite']);
@@ -286,6 +289,9 @@ gulp.task('default', ['browser-sync', 'sprite'], function() {
   // Watch JavaScript
   gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
+
+// Default tasks
+gulp.task('default', ['browser-sync', 'sprite', 'watch'] );
 
 // When before distribute, 'dist' task will be executed.
 gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
