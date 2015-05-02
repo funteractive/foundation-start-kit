@@ -31,7 +31,7 @@ var fs              = require('fs');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
-var jadePath         = './shared/jade/';
+var jadePath           = './shared/jade/';
 var htmlPath           = './';
 var scssPath           = './shared/scss/';
 var cssPath            = './';
@@ -40,10 +40,10 @@ var imgPath            = './shared/img/';
 var jsPath             = './shared/js/';
 var bowerPath          = './bower_components/';
 var foundationScssPath = bowerPath + 'foundation/scss/';
-var bsProxy = false; // When you need proxy; write your own domain.
+var bsProxy            = false; // When you need proxy; write your own domain.
 
 // For WordPress theme style.css comment : This is optional function.
-var wpThemeName      = 'Your Theme Name';
+var wpThemeName        = 'Your Theme Name';
 var wpThemeUri         = 'Your Theme URI';
 var wpThemeAuthor      = 'Your Theme Author';
 var wpThemeAuthorUri   = 'Your Theme Author URI';
