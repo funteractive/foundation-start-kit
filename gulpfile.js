@@ -19,45 +19,43 @@
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
 
-var gulp         = require('gulp'),
-  $              = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] }),
-  browserSync    = require('browser-sync'),
-  browserify     = require('browserify'),
-  buffer         = require('vinyl-buffer'),
-  source         = require('vinyl-source-stream'),
-  runSequence    = require('run-sequence'),
-  fs             = require('fs')
-  ;
+var gulp            = require('gulp');
+var gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
+var browserSync     = require('browser-sync');
+var browserify      = require('browserify');
+var buffer          = require('vinyl-buffer');
+var source          = require('vinyl-source-stream');
+var runSequence     = require('run-sequence');
+var fs              = require('fs');
 
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
-var jadePath         = './shared/jade/',
-  htmlPath           = './',
-  scssPath           = './shared/scss/',
-  cssPath            = './',
-  styleGuidePath     = './styleguide/',
-  imgPath            = './shared/img/',
-  jsPath             = './shared/js/',
-  bowerPath          = './bower_components/',
-  foundationScssPath = bowerPath + 'foundation/scss/',
-  bsProxy = false // When you need proxy, write your own domain.
-  ;
+var jadePath           = './shared/jade/';
+var htmlPath           = './';
+var scssPath           = './shared/scss/';
+var cssPath            = './';
+var styleGuidePath     = './styleguide/';
+var imgPath            = './shared/img/';
+var jsPath             = './shared/js/';
+var bowerPath          = './bower_components/';
+var foundationScssPath = bowerPath + 'foundation/scss/';
+var bsProxy            = false; // When you need proxy; write your own domain.
 
 // For WordPress theme style.css comment : This is optional function.
-var wpThemeName      = 'Your Theme Name',
-  wpThemeUri         = 'Your Theme URI',
-  wpThemeAuthor      = 'Your Theme Author',
-  wpThemeAuthorUri   = 'Your Theme Author URI',
-  wpThemeDescription = 'Your Theme Description',
-  wpThemeVersion     = 'Your Theme Version',
-  wpThemeLicense     = 'Your Theme License',
-  wpThemeLicenseUri  = 'Your Theme License URI',
-  wpThemeTag         = 'Your Theme Tags',
-  wpThemeTextDomain  = 'Your Theme Text Domain',
-  wpThemeOption      = '',
-  wpThemeInfo
-  ;
+var wpThemeName        = 'Your Theme Name';
+var wpThemeUri         = 'Your Theme URI';
+var wpThemeAuthor      = 'Your Theme Author';
+var wpThemeAuthorUri   = 'Your Theme Author URI';
+var wpThemeDescription = 'Your Theme Description';
+var wpThemeVersion     = 'Your Theme Version';
+var wpThemeLicense     = 'Your Theme License';
+var wpThemeLicenseUri  = 'Your Theme License URI';
+var wpThemeTag         = 'Your Theme Tags';
+var wpThemeTextDomain  = 'Your Theme Text Domain';
+var wpThemeOption      = '';
+var wpThemeInfo;
+
 // When you make WordPress theme, activate this comment.
 //wpThemeInfo = '@charset "UTF-8";\n'
 //  + '/*\n'
@@ -80,7 +78,7 @@ var wpThemeName      = 'Your Theme Name',
 
 // Install libraries with Bower
 gulp.task('bower', function() {
-  return $.bower()
+  return gulpLoadPlugins.bower()
     .pipe(gulp.dest(bowerPath));
 });
 
@@ -90,7 +88,7 @@ gulp.task('copy:foundation', function() {
     foundationScssPath + 'foundation.scss',
     foundationScssPath + 'foundation/_settings.scss'
   ])
-    .pipe($.rename({
+    .pipe(gulpLoadPlugins.rename({
       prefix: '_'
     }))
     .pipe(gulp.dest(scssPath + 'core/'));
@@ -120,10 +118,10 @@ gulp.task('browser-sync', function() {
 // Compile Jade to HTML
 gulp.task('jade', function() {
   return gulp.src(jadePath + '*.jade')
-    .pipe($.data(function(file) {
+    .pipe(gulpLoadPlugins.data(function(file) {
       return require(jadePath + 'setting.json')
     }))
-    .pipe($.jade({ pretty: true }))
+    .pipe(gulpLoadPlugins.jade({ pretty: true }))
     .pipe(gulp.dest(htmlPath))
     .pipe(browserSync.reload({ stream:true }));
 });
@@ -134,7 +132,7 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return $.rubySass(scssPath, {
+  return gulpLoadPlugins.rubySass(scssPath, {
       loadPath: [bowerPath + 'foundation/scss', bowerPath + 'fontawesome/scss'],
       style: 'nested',
       bundleExec: false,
@@ -142,21 +140,21 @@ gulp.task('sass', function() {
       sourcemap: false
     })
     .on('error', function(err) { console.error('Error!', err.message); })
-    .pipe($.autoprefixer({
+    .pipe(gulpLoadPlugins.autoprefixer({
       browsers: ['last 2 versions', 'ie 10', 'ie 9']
     }))
-    .pipe($.csscomb())
-    .pipe($.csso())
-    .pipe($.csslint())
+    .pipe(gulpLoadPlugins.csscomb())
+    .pipe(gulpLoadPlugins.csso())
+    .pipe(gulpLoadPlugins.csslint())
     .pipe(gulp.dest(cssPath));
 });
 
 // Add comment for initialize WordPress theme at the beginning of style.css.
 gulp.task('wp:comment', function() {
   fs.open(cssPath + 'style.css', 'r', function(err, fd) {
-    if(!err) {
+    if (!err) {
       gulp.src([cssPath + 'wp-theme-info.css', cssPath + 'style.css'])
-        .pipe($.concat('style.css'))
+        .pipe(gulpLoadPlugins.concat('style.css'))
         .pipe(gulp.dest(cssPath));
     }
     fd && fs.close(fd, function(err) { });
@@ -179,7 +177,7 @@ gulp.task('styleguide', function() {
 
   // Make style guide
   gulp.src([scssPath + '*.scss', scssPath + '**/*.scss'])
-    .pipe($.kss({
+    .pipe(gulpLoadPlugins.kss({
       overview: styleGuidePath + 'styleguide.md',
       templateDirectory: styleGuidePath + 'template/'
     }))
@@ -193,14 +191,14 @@ gulp.task('styleguide', function() {
 // make sprite image and css for sprite
 gulp.task('sprite', function() {
   var spriteData = gulp.src(imgPath + 'sprite/*.png')
-    .pipe($.spritesmith({
+    .pipe(gulpLoadPlugins.spritesmith({
       imgName: 'sprite.png',
       cssName: '_sprite.scss'
     }));
 
   // minify images
   spriteData.img
-    .pipe($.imagemin())
+    .pipe(gulpLoadPlugins.imagemin())
     .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
 
@@ -213,7 +211,7 @@ gulp.task('sprite', function() {
 // optimize images
 gulp.task('imagemin', function() {
   return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
-    .pipe($.imagemin())
+    .pipe(gulpLoadPlugins.imagemin())
     .pipe(gulp.dest(imgPath))
 });
 
@@ -225,7 +223,7 @@ gulp.task('js', function() {
     .bundle()
     .pipe(source('build.js'))
     .pipe(buffer())
-    .pipe($.uglify())
+    .pipe(gulpLoadPlugins.uglify())
     .pipe(gulp.dest(jsPath));
 });
 
@@ -235,7 +233,7 @@ gulp.task('js', function() {
 
 // Make a file for WordPress comment to be initialized by theme.
 function makeWpThemeInfoFile() {
-  if(wpThemeInfo) {
+  if (wpThemeInfo) {
     fs.writeFile(cssPath + 'wp-theme-info.css', wpThemeInfo);
   }
 }
