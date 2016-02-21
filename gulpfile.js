@@ -39,7 +39,7 @@ var styleGuidePath     = './styleguide/';
 var imgPath            = './shared/img/';
 var jsPath             = './shared/js/';
 var bowerPath          = './bower_components/';
-var foundationScssPath = bowerPath + 'foundation/scss/';
+var foundationScssPath = bowerPath + 'foundation-sites/scss/';
 var bsProxy            = false; // When you need proxy; write your own domain.
 
 
