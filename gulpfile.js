@@ -209,8 +209,6 @@ gulp.task('build', ['bower'], function() {
     }
     fd && fs.close(fd, function(err) { });
   });
-
-  makeWpThemeInfoFile();
 });
 
 // Watch tasks
