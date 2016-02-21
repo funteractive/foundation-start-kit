@@ -56,7 +56,7 @@ gulp.task('bower', function() {
 gulp.task('copy:foundation', function() {
   return gulp.src([
     foundationScssPath + 'foundation.scss',
-    foundationScssPath + 'foundation/_settings.scss'
+    foundationScssPath + 'settings/_settings.scss'
   ])
     .pipe(gulpLoadPlugins.rename({
       prefix: '_'
