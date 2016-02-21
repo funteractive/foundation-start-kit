@@ -10,11 +10,7 @@ html(xmlns:og="http://ogp.me/ns#", xmlns:fb='https://www.facebook.com/2008/fbml'
       link(rel='icon', href='/favicon.ico')
       link(rel='shortcut icon', href='/favicon.ico')
       link(rel='apple-touch-icon', href='/apple-touch-icon.png')
-      link(rel='stylesheet', href='style.css')
-    block script
-      != '\n<!--[if lt IE 9]>'
-      script(src="shared/js/lib/html5shiv/html5shiv-printshiv.js")
-      != '\n<![endif]-->'
+      link(rel='stylesheet', href='app.css')
   body(class="#{bodyClass}")
     #fb-root
     block body

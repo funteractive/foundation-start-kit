@@ -103,7 +103,7 @@ gulp.task('jade', function() {
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
   return gulpLoadPlugins.rubySass(scssPath, {
-      loadPath: [bowerPath + 'foundation/scss', bowerPath + 'fontawesome/scss'],
+      loadPath: [bowerPath + 'foundation-sites/scss', bowerPath + 'fontawesome/scss'],
       style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
@@ -119,20 +119,8 @@ gulp.task('sass', function() {
     .pipe(gulp.dest(cssPath));
 });
 
-// Add comment for initialize WordPress theme at the beginning of style.css.
-gulp.task('wp:comment', function() {
-  fs.open(cssPath + 'style.css', 'r', function(err, fd) {
-    if (!err) {
-      gulp.src([cssPath + 'wp-theme-info.css', cssPath + 'style.css'])
-        .pipe(gulpLoadPlugins.concat('style.css'))
-        .pipe(gulp.dest(cssPath));
-    }
-    fd && fs.close(fd, function(err) { });
-  });
-});
-
 gulp.task('css', function() {
-  runSequence('sass', 'wp:comment');
+  runSequence('sass');
 });
 
 
