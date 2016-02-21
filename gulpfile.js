@@ -13,8 +13,7 @@
 //   7. Style guide
 //   8. Image
 //   9. JavaScript
-//  10. WordPress
-//  11. Tasks
+//  10. Tasks
 
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
@@ -156,6 +155,7 @@ gulp.task('sprite', function() {
 
   // minify images
   spriteData.img
+    .pipe(buffer())
     .pipe(gulpLoadPlugins.imagemin())
     .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
@@ -186,7 +186,7 @@ gulp.task('js', function() {
 });
 
 
-// 11. NOW BRING IT TOGETHER
+// 10. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
