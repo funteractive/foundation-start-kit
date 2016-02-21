@@ -42,36 +42,6 @@ var bowerPath          = './bower_components/';
 var foundationScssPath = bowerPath + 'foundation/scss/';
 var bsProxy            = false; // When you need proxy; write your own domain.
 
-// For WordPress theme style.css comment : This is optional function.
-var wpThemeName        = 'Your Theme Name';
-var wpThemeUri         = 'Your Theme URI';
-var wpThemeAuthor      = 'Your Theme Author';
-var wpThemeAuthorUri   = 'Your Theme Author URI';
-var wpThemeDescription = 'Your Theme Description';
-var wpThemeVersion     = 'Your Theme Version';
-var wpThemeLicense     = 'Your Theme License';
-var wpThemeLicenseUri  = 'Your Theme License URI';
-var wpThemeTag         = 'Your Theme Tags';
-var wpThemeTextDomain  = 'Your Theme Text Domain';
-var wpThemeOption      = '';
-var wpThemeInfo;
-
-// When you make WordPress theme, activate this comment.
-//wpThemeInfo = '@charset "UTF-8";\n'
-//  + '/*\n'
-//  + ' Theme Name: ' + wpThemeName + '\n'
-//  + ' Theme URI: ' + wpThemeUri + '\n'
-//  + ' Author: ' + wpThemeAuthor + '\n'
-//  + ' Author URI: ' + wpThemeAuthorUri + '\n'
-//  + ' Description: ' + wpThemeDescription + '\n'
-//  + ' Version: ' + wpThemeVersion + '\n'
-//  + ' Theme License: ' + wpThemeLicense + '\n'
-//  + ' License URI: ' + wpThemeLicenseUri + '\n'
-//  + ' Tags: ' + wpThemeTag + '\n'
-//  + ' Text Domain: ' + wpThemeTextDomain + '\n'
-//  + wpThemeOption
-//  + '*/\n';
-
 
 // 3. BUILD
 // - - - - - - - - - - - - - - -
@@ -225,21 +195,6 @@ gulp.task('js', function() {
     .pipe(buffer())
     .pipe(gulpLoadPlugins.uglify())
     .pipe(gulp.dest(jsPath));
-});
-
-
-// 10. WORDPRESS
-// - - - - - - - - - - - - - - -
-
-// Make a file for WordPress comment to be initialized by theme.
-function makeWpThemeInfoFile() {
-  if (wpThemeInfo) {
-    fs.writeFile(cssPath + 'wp-theme-info.css', wpThemeInfo);
-  }
-}
-
-gulp.task('wp:css', function() {
-  makeWpThemeInfoFile();
 });
 
 
