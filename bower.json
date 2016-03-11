@@ -1,20 +1,11 @@
 {
-  "name": "Funteractive-start-theme",
+  "name": "foundation-start-kit",
   "ignore": [
     "**/.*",
     "node_modules",
     "components"
   ],
-  "dependencies": {
-    "html5shiv": "*",
-    "jquery": "*",
-    "foundation": "*",
-    "fontawesome": "*"
-  },
   "exportsOverride": {
-    "jquery": {
-      "": "**/jquery.min.js"
-    },
     "html5shiv": {
       "": "**/html5shiv-printshiv.js"
     },
@@ -26,5 +17,9 @@
       "scss": "scss",
       "js": "js"
     }
+  },
+  "devDependencies": {
+    "foundation-sites": "~6.1.2",
+    "fontawesome": "~4.5.0"
   }
 }

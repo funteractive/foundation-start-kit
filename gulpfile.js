@@ -13,8 +13,7 @@
 //   7. Style guide
 //   8. Image
 //   9. JavaScript
-//  10. WordPress
-//  11. Tasks
+//  10. Tasks
 
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
@@ -39,38 +38,8 @@ var styleGuidePath     = './styleguide/';
 var imgPath            = './shared/img/';
 var jsPath             = './shared/js/';
 var bowerPath          = './bower_components/';
-var foundationScssPath = bowerPath + 'foundation/scss/';
+var foundationScssPath = bowerPath + 'foundation-sites/scss/';
 var bsProxy            = false; // When you need proxy; write your own domain.
-
-// For WordPress theme style.css comment : This is optional function.
-var wpThemeName        = 'Your Theme Name';
-var wpThemeUri         = 'Your Theme URI';
-var wpThemeAuthor      = 'Your Theme Author';
-var wpThemeAuthorUri   = 'Your Theme Author URI';
-var wpThemeDescription = 'Your Theme Description';
-var wpThemeVersion     = 'Your Theme Version';
-var wpThemeLicense     = 'Your Theme License';
-var wpThemeLicenseUri  = 'Your Theme License URI';
-var wpThemeTag         = 'Your Theme Tags';
-var wpThemeTextDomain  = 'Your Theme Text Domain';
-var wpThemeOption      = '';
-var wpThemeInfo;
-
-// When you make WordPress theme, activate this comment.
-//wpThemeInfo = '@charset "UTF-8";\n'
-//  + '/*\n'
-//  + ' Theme Name: ' + wpThemeName + '\n'
-//  + ' Theme URI: ' + wpThemeUri + '\n'
-//  + ' Author: ' + wpThemeAuthor + '\n'
-//  + ' Author URI: ' + wpThemeAuthorUri + '\n'
-//  + ' Description: ' + wpThemeDescription + '\n'
-//  + ' Version: ' + wpThemeVersion + '\n'
-//  + ' Theme License: ' + wpThemeLicense + '\n'
-//  + ' License URI: ' + wpThemeLicenseUri + '\n'
-//  + ' Tags: ' + wpThemeTag + '\n'
-//  + ' Text Domain: ' + wpThemeTextDomain + '\n'
-//  + wpThemeOption
-//  + '*/\n';
 
 
 // 3. BUILD
@@ -86,7 +55,7 @@ gulp.task('bower', function() {
 gulp.task('copy:foundation', function() {
   return gulp.src([
     foundationScssPath + 'foundation.scss',
-    foundationScssPath + 'foundation/_settings.scss'
+    foundationScssPath + 'settings/_settings.scss'
   ])
     .pipe(gulpLoadPlugins.rename({
       prefix: '_'
@@ -133,7 +102,7 @@ gulp.task('jade', function() {
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
   return gulpLoadPlugins.rubySass(scssPath, {
-      loadPath: [bowerPath + 'foundation/scss', bowerPath + 'fontawesome/scss'],
+      loadPath: [bowerPath + 'foundation-sites/scss', bowerPath + 'fontawesome/scss'],
       style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
@@ -149,20 +118,8 @@ gulp.task('sass', function() {
     .pipe(gulp.dest(cssPath));
 });
 
-// Add comment for initialize WordPress theme at the beginning of style.css.
-gulp.task('wp:comment', function() {
-  fs.open(cssPath + 'style.css', 'r', function(err, fd) {
-    if (!err) {
-      gulp.src([cssPath + 'wp-theme-info.css', cssPath + 'style.css'])
-        .pipe(gulpLoadPlugins.concat('style.css'))
-        .pipe(gulp.dest(cssPath));
-    }
-    fd && fs.close(fd, function(err) { });
-  });
-});
-
 gulp.task('css', function() {
-  runSequence('sass', 'wp:comment');
+  runSequence('sass');
 });
 
 
@@ -198,6 +155,7 @@ gulp.task('sprite', function() {
 
   // minify images
   spriteData.img
+    .pipe(buffer())
     .pipe(gulpLoadPlugins.imagemin())
     .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
@@ -228,22 +186,7 @@ gulp.task('js', function() {
 });
 
 
-// 10. WORDPRESS
-// - - - - - - - - - - - - - - -
-
-// Make a file for WordPress comment to be initialized by theme.
-function makeWpThemeInfoFile() {
-  if (wpThemeInfo) {
-    fs.writeFile(cssPath + 'wp-theme-info.css', wpThemeInfo);
-  }
-}
-
-gulp.task('wp:css', function() {
-  makeWpThemeInfoFile();
-});
-
-
-// 11. NOW BRING IT TOGETHER
+// 10. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
@@ -266,8 +209,6 @@ gulp.task('build', ['bower'], function() {
     }
     fd && fs.close(fd, function(err) { });
   });
-
-  makeWpThemeInfoFile();
 });
 
 // Watch tasks
