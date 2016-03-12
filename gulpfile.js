@@ -114,7 +114,7 @@ gulp.task('sass', function() {
         bowerPath + 'foundation-sites/scss',
         bowerPath + 'fontawesome/scss'
       ],
-      style: 'expanded',
+      style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
       sourcemap: false
@@ -132,8 +132,21 @@ gulp.task('sass', function() {
     .pipe( browserSync.reload( { stream:true } ) );
 });
 
-gulp.task('css', function() {
-  runSequence('sass');
+gulp.task('cssmin', function() {
+  gulp.src(cssPath + 'app.css')
+    .pipe(gulpLoadPlugins.rename({
+      suffix: '.min'
+    }))
+    .pipe(gulpLoadPlugins.csso())
+    .pipe(gulp.dest(cssPath));
+})
+
+gulp.task('css', function(callback) {
+  return runSequence(
+    'sass',
+    'cssmin',
+    callback
+  );
 });
 
 
@@ -262,7 +275,7 @@ gulp.task('watch', function() {
 gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
 
 // When before distribute, 'dist' task will be executed.
-gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
+gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
 
 // 11. Functions
 // - - - - - - - - - - - - - - -
