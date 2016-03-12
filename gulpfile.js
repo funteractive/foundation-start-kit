@@ -26,7 +26,8 @@ var buffer          = require('vinyl-buffer');
 var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
-
+var pngquant        = require( 'imagemin-pngquant' );
+var watchify        = require( 'watchify' );
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
