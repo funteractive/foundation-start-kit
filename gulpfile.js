@@ -109,21 +109,27 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return gulpLoadPlugins.rubySass(scssPath, {
-      loadPath: [bowerPath + 'foundation-sites/scss', bowerPath + 'fontawesome/scss'],
-      style: 'nested',
+  return gulpLoadPlugins.rubySass(scssPath + '**/*.scss', {
+      loadPath: [
+        bowerPath + 'foundation-sites/scss',
+        bowerPath + 'fontawesome/scss'
+      ],
+      style: 'expanded',
       bundleExec: false,
       require: 'sass-globbing',
       sourcemap: false
     })
-    .on('error', function(err) { console.error('Error!', err.message); })
-    .pipe(gulpLoadPlugins.autoprefixer({
-      browsers: ['last 2 versions', 'ie 10', 'ie 9']
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.pleeease({
+      "autoprefixer": {"browsers": ["last 2 versions", "ie 10", "ie 9"]},
+      "minifier": false
     }))
     .pipe(gulpLoadPlugins.csscomb())
-    .pipe(gulpLoadPlugins.csso())
     .pipe(gulpLoadPlugins.csslint())
     .pipe(gulp.dest(cssPath));
+    .pipe( browserSync.reload( { stream:true } ) );
 });
 
 gulp.task('css', function() {
