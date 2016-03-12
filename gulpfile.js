@@ -203,13 +203,13 @@ gulp.task('imagemin', function() {
 
 // 9. JAVASCRIPT
 // - - - - - - - - - - - - - - -
-gulp.task('js', function() {
-  browserify(jsPath + 'src/app.js')
-    .bundle()
-    .pipe(source('build.js'))
-    .pipe(buffer())
-    .pipe(gulpLoadPlugins.uglify())
-    .pipe(gulp.dest(jsPath));
+// browserify
+gulp.task('browserify', function() {
+  return buildScript( false );
+});
+// watchify
+gulp.task('watchify', function() {
+  return buildScript( true );
 });
 
 
@@ -261,3 +261,46 @@ gulp.task('default', ['browser-sync', 'sprite', 'watch'] );
 
 // When before distribute, 'dist' task will be executed.
 gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
+
+// 11. Functions
+// - - - - - - - - - - - - - - -
+// Error Handle
+function handleErrors() {
+  var args = Array.prototype.slice.call(arguments);
+  gulpLoadPlugins.notify.onError({
+    title: 'Compile Error',
+    message: '<%= error.message %>'
+  }).apply(this, args);
+  this.emit('end');
+}
+// watchfiy build script
+function buildScript( watch ) {
+  var props = {
+    entries: [ jsPath + 'src/app.js']
+  };
+  var bundler;
+  if ( watch ) {
+    bundler = watchify( browserify( props ) );
+  } else{
+    bundler = browserify( props );
+  }
+  function rebundle() {
+    return bundler
+      .bundle()
+      .on( 'error', handleErrors )
+      .on( 'end', function() { gulpLoadPlugins.util.log("browserify compile success."); } )
+      .pipe( source( 'build.js' ) )
+      .pipe( buffer() )
+      .pipe( gulpLoadPlugins.uglify() )
+      .pipe( gulp.dest( jsPath ) )
+      .pipe( browserSync.reload( { stream:true } ) );
+  }
+  bundler.on('update', function() {
+    rebundle();
+    gulpLoadPlugins.util.log('update javascript...');
+  });
+  bundler.on('log', function(message) {
+    gulpLoadPlugins.util.log(message);
+  });
+  return rebundle();
+}
