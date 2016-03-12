@@ -164,13 +164,23 @@ gulp.task('sprite', function() {
   var spriteData = gulp.src(imgPath + 'sprite/*.png')
     .pipe(gulpLoadPlugins.spritesmith({
       imgName: 'sprite.png',
-      cssName: '_sprite.scss'
+      imgPath: imgPath + 'sprite.png',
+      cssName: '_sprite.scss',
+      cssTemplate: '.sprite-template',
+      algorithm:'top-down',
+      padding: 20,
+      algorithmOpts : {
+        sort: false
+      }
     }));
 
   // minify images
   spriteData.img
     .pipe(buffer())
-    .pipe(gulpLoadPlugins.imagemin())
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({quality: '70-80', speed: 1})]
+    }))
     .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
 
@@ -183,7 +193,10 @@ gulp.task('sprite', function() {
 // optimize images
 gulp.task('imagemin', function() {
   return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
-    .pipe(gulpLoadPlugins.imagemin())
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({quality: '70-80', speed: 1})]
+    }))
     .pipe(gulp.dest(imgPath))
 });
 
