@@ -26,8 +26,8 @@ var buffer          = require('vinyl-buffer');
 var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
-var pngquant        = require( 'imagemin-pngquant' );
-var watchify        = require( 'watchify' );
+var pngquant        = require('imagemin-pngquant');
+var watchify        = require('watchify');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
@@ -128,7 +128,7 @@ gulp.task('sass', function() {
     }))
     .pipe(gulpLoadPlugins.csscomb())
     .pipe(gulpLoadPlugins.csslint())
-    .pipe(gulp.dest(cssPath));
+    .pipe(gulp.dest(cssPath))
     .pipe( browserSync.reload( { stream:true } ) );
 });
 
