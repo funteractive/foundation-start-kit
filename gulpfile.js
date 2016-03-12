@@ -240,24 +240,26 @@ gulp.task('build', ['bower'], function() {
 
 // Watch tasks
 gulp.task('watch', function() {
-  // Watch Jade
-  gulp.watch([jadePath + '*', jadePath + '**/*'], ['jade']);
 
-  // Watch PHP. When you make WordPress theme, activate this.
-  //gulp.watch(['./*.php'], browserSync.reload);
+  // Watch Jade
+  gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(e){
+    gulp.start('jade');
+  });
 
   // Watch Sprite
-  gulp.watch([imgPath + 'sprite/*.png'], ['sprite']);
+  gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(e){
+    gulp.start('sprite');
+  });
 
   // Watch Sass
-  gulp.watch([scssPath + '*', scssPath + '**/*'], ['css', browserSync.reload]);
+  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(e){
+    gulp.start('sass');
+  });
 
-  // Watch JavaScript
-  gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
 
 // Default tasks
-gulp.task('default', ['browser-sync', 'sprite', 'watch'] );
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
 
 // When before distribute, 'dist' task will be executed.
 gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
