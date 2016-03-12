@@ -186,7 +186,6 @@ Elementの階層が深くなるとその分セレクタ名称も長くなるた�
 
 | 単語       | 説明        |
 |:-----------|:------------|
-| wrap       | block要素を囲む場合など、外側のコンテナ |
 | inner      | wrapに対する内側のコンテナ |
 | block      | コンテンツを内包するブロック |
 | slider     | スライドコンテンツ |
@@ -199,6 +198,7 @@ Elementの階層が深くなるとその分セレクタ名称も長くなるた�
 | heading    | 見出しを内包する要素 |
 | title      | タイトル |
 | subTitle   | サブタイトル |
+| content    | コンテンツ |
 | description| コンテンツ説明本文 |
 | caption    | 画像に対する説明 |
 | summary    | コンテンツの概要 |
@@ -253,14 +253,14 @@ CSS
 spriteフォルダに配置した画像ファイル名を指定する
 
 ~~~~
-@include sprite($name);
+@include sprite-ir($name);
 ~~~~
 
 ### モバイル対応
 別途定義済みの `r-sprite` mixinを使用
 
 ~~~~
-@include r-sprite($name);
+@include sprite-ir($name,$mobile:true);
 ~~~~
 
 ## JavaScript
@@ -272,4 +272,4 @@ JavaScriptは動的な表現が必要な際と、外部APIなどを利用する�
 - Browserifyで `build.js` に集約して出力される。
 
 
-策定　2015年2月22日
+策定　2016年3月12日
