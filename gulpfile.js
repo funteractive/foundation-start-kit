@@ -87,9 +87,16 @@ gulp.task('browser-sync', function() {
 
 // Compile Jade to HTML
 gulp.task('jade', function() {
-  return gulp.src(jadePath + '*.jade')
+  return gulp.src([jadePath + '/**/!(_)*.jade'])
     .pipe(gulpLoadPlugins.data(function(file) {
       return require(jadePath + 'setting.json')
+    }))
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.changed(htmlPath, {
+      extension: '.html',
+      hashChanged: gulpLoadPlugins.changed.compareSha1Digest
     }))
     .pipe(gulpLoadPlugins.jade({ pretty: true }))
     .pipe(gulp.dest(htmlPath))
