@@ -26,7 +26,8 @@ var buffer          = require('vinyl-buffer');
 var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
-
+var pngquant        = require('imagemin-pngquant');
+var watchify        = require('watchify');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
@@ -86,9 +87,16 @@ gulp.task('browser-sync', function() {
 
 // Compile Jade to HTML
 gulp.task('jade', function() {
-  return gulp.src(jadePath + '*.jade')
+  return gulp.src([jadePath + '/**/!(_)*.jade'])
     .pipe(gulpLoadPlugins.data(function(file) {
       return require(jadePath + 'setting.json')
+    }))
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.changed(htmlPath, {
+      extension: '.html',
+      hashChanged: gulpLoadPlugins.changed.compareSha1Digest
     }))
     .pipe(gulpLoadPlugins.jade({ pretty: true }))
     .pipe(gulp.dest(htmlPath))
@@ -101,25 +109,44 @@ gulp.task('jade', function() {
 
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
-  return gulpLoadPlugins.rubySass(scssPath, {
-      loadPath: [bowerPath + 'foundation-sites/scss', bowerPath + 'fontawesome/scss'],
+  return gulpLoadPlugins.rubySass(scssPath + '**/*.scss', {
+      loadPath: [
+        bowerPath + 'foundation-sites/scss',
+        bowerPath + 'fontawesome/scss'
+      ],
       style: 'nested',
       bundleExec: false,
       require: 'sass-globbing',
       sourcemap: false
     })
-    .on('error', function(err) { console.error('Error!', err.message); })
-    .pipe(gulpLoadPlugins.autoprefixer({
-      browsers: ['last 2 versions', 'ie 10', 'ie 9']
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.pleeease({
+      "autoprefixer": {"browsers": ["last 2 versions", "ie 10", "ie 9"]},
+      "minifier": false
     }))
     .pipe(gulpLoadPlugins.csscomb())
-    .pipe(gulpLoadPlugins.csso())
     .pipe(gulpLoadPlugins.csslint())
-    .pipe(gulp.dest(cssPath));
+    .pipe(gulp.dest(cssPath))
+    .pipe( browserSync.reload( { stream:true } ) );
 });
 
-gulp.task('css', function() {
-  runSequence('sass');
+gulp.task('cssmin', function() {
+  gulp.src(cssPath + 'app.css')
+    .pipe(gulpLoadPlugins.rename({
+      suffix: '.min'
+    }))
+    .pipe(gulpLoadPlugins.csso())
+    .pipe(gulp.dest(cssPath));
+})
+
+gulp.task('css', function(callback) {
+  return runSequence(
+    'sass',
+    'cssmin',
+    callback
+  );
 });
 
 
@@ -150,13 +177,23 @@ gulp.task('sprite', function() {
   var spriteData = gulp.src(imgPath + 'sprite/*.png')
     .pipe(gulpLoadPlugins.spritesmith({
       imgName: 'sprite.png',
-      cssName: '_sprite.scss'
+      imgPath: imgPath + 'sprite.png',
+      cssName: '_sprite.scss',
+      cssTemplate: '.sprite-template',
+      algorithm:'top-down',
+      padding: 20,
+      algorithmOpts : {
+        sort: false
+      }
     }));
 
   // minify images
   spriteData.img
     .pipe(buffer())
-    .pipe(gulpLoadPlugins.imagemin())
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({quality: '70-80', speed: 1})]
+    }))
     .pipe(gulp.dest(imgPath))
     .pipe(browserSync.reload({ stream:true }));
 
@@ -169,20 +206,23 @@ gulp.task('sprite', function() {
 // optimize images
 gulp.task('imagemin', function() {
   return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
-    .pipe(gulpLoadPlugins.imagemin())
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({quality: '70-80', speed: 1})]
+    }))
     .pipe(gulp.dest(imgPath))
 });
 
 
 // 9. JAVASCRIPT
 // - - - - - - - - - - - - - - -
-gulp.task('js', function() {
-  browserify(jsPath + 'src/app.js')
-    .bundle()
-    .pipe(source('build.js'))
-    .pipe(buffer())
-    .pipe(gulpLoadPlugins.uglify())
-    .pipe(gulp.dest(jsPath));
+// browserify
+gulp.task('browserify', function() {
+  return buildScript( false );
+});
+// watchify
+gulp.task('watchify', function() {
+  return buildScript( true );
 });
 
 
@@ -213,24 +253,69 @@ gulp.task('build', ['bower'], function() {
 
 // Watch tasks
 gulp.task('watch', function() {
-  // Watch Jade
-  gulp.watch([jadePath + '*', jadePath + '**/*'], ['jade']);
 
-  // Watch PHP. When you make WordPress theme, activate this.
-  //gulp.watch(['./*.php'], browserSync.reload);
+  // Watch Jade
+  gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(e){
+    gulp.start('jade');
+  });
 
   // Watch Sprite
-  gulp.watch([imgPath + 'sprite/*.png'], ['sprite']);
+  gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(e){
+    gulp.start('sprite');
+  });
 
   // Watch Sass
-  gulp.watch([scssPath + '*', scssPath + '**/*'], ['css', browserSync.reload]);
+  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(e){
+    gulp.start('sass');
+  });
 
-  // Watch JavaScript
-  gulp.watch([jsPath + 'src/*'], ['js', browserSync.reload]);
 });
 
 // Default tasks
-gulp.task('default', ['browser-sync', 'sprite', 'watch'] );
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
 
 // When before distribute, 'dist' task will be executed.
-gulp.task('dist', ['jade', 'css', 'js', 'sprite', 'imagemin']);
+gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
+
+// 11. Functions
+// - - - - - - - - - - - - - - -
+// Error Handle
+function handleErrors() {
+  var args = Array.prototype.slice.call(arguments);
+  gulpLoadPlugins.notify.onError({
+    title: 'Compile Error',
+    message: '<%= error.message %>'
+  }).apply(this, args);
+  this.emit('end');
+}
+// watchfiy build script
+function buildScript( watch ) {
+  var props = {
+    entries: [ jsPath + 'src/app.js']
+  };
+  var bundler;
+  if ( watch ) {
+    bundler = watchify( browserify( props ) );
+  } else{
+    bundler = browserify( props );
+  }
+  function rebundle() {
+    return bundler
+      .bundle()
+      .on( 'error', handleErrors )
+      .on( 'end', function() { gulpLoadPlugins.util.log("browserify compile success."); } )
+      .pipe( source( 'build.js' ) )
+      .pipe( buffer() )
+      .pipe( gulpLoadPlugins.uglify() )
+      .pipe( gulp.dest( jsPath ) )
+      .pipe( browserSync.reload( { stream:true } ) );
+  }
+  bundler.on('update', function() {
+    rebundle();
+    gulpLoadPlugins.util.log('update javascript...');
+  });
+  bundler.on('log', function(message) {
+    gulpLoadPlugins.util.log(message);
+  });
+  return rebundle();
+}
