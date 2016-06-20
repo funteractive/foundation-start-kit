@@ -13,6 +13,7 @@
 //   7. Style guide
 //   8. Image
 //   9. JavaScript
+//  10. Linter
 //  10. Tasks
 
 // 1. LIBRARIES
@@ -87,7 +88,7 @@ gulp.task('browser-sync', function() {
 
 // Compile Jade to HTML
 gulp.task('jade', function() {
-  return gulp.src([jadePath + '/**/!(_)*.jade'])
+  return gulp.src([jadePath + '**/!(_)*.jade'])
     .pipe(gulpLoadPlugins.data(function(file) {
       return require(jadePath + 'setting.json')
     }))
@@ -225,8 +226,28 @@ gulp.task('watchify', function() {
   return buildScript( true );
 });
 
+// 10. LINTER
+// - - - - - - - - - - - - - - -
+gulp.task('html-hint', function() {
+  return gulp.src([htmlPath + '*.html', htmlPath + '**/*.html', '!node_modules/**/*.html'])
+    .pipe(gulpLoadPlugins.htmlhint())
+    .pipe(gulpLoadPlugins.htmlhint.failReporter())
+    .pipe(gulpLoadPlugins.htmlhint.reporter());
+});
 
-// 10. NOW BRING IT TOGETHER
+gulp.task('css-lint', function() {
+  return gulp.src([cssPath + 'app.css'])
+    .pipe(gulpLoadPlugins.csslint())
+    .pipe(gulpLoadPlugins.csslint.reporter());
+});
+
+gulp.task('js-hint', function() {
+  return gulp.src([jsPath + 'src/*.js'])
+    .pipe(gulpLoadPlugins.jshint())
+    .pipe(gulpLoadPlugins.jshint.reporter('jshint-stylish'));
+});
+
+// 11. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 
 // Build the documentation once
@@ -277,7 +298,9 @@ gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
 // When before distribute, 'dist' task will be executed.
 gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
 
-// 11. Functions
+gulp.task('lint', ['html-hint', 'css-lint', 'js-hint']);
+
+// 12. Functions
 // - - - - - - - - - - - - - - -
 // Error Handle
 function handleErrors() {
