@@ -1,0 +1,18 @@
+doctype html
+html(xmlns:og="http://ogp.me/ns#", xmlns:fb='https://www.facebook.com/2008/fbml')
+  head
+    meta(charset='UTF-8')
+    block title
+    block meta
+      meta(name='description', content=description)
+      meta(name='keywords', content=keywords)
+    block link
+      link(rel='icon', href='/favicon.ico')
+      link(rel='shortcut icon', href='/favicon.ico')
+      link(rel='apple-touch-icon', href='/apple-touch-icon.png')
+      link(rel='stylesheet', href='app.css')
+  body(class="#{bodyClass}")
+    #fb-root
+    block body
+    block scriptFooter
+      script(src="shared/js/build.js")

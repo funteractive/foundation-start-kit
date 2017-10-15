@@ -1,0 +1,12 @@
+{
+  "name": "site name",
+  "url": "http://funteractive.jp/",
+  "page":{
+    "top":{
+      "title": "site name",
+      "description": "",
+      "keywords": "",
+      "ogimage":""
+    }
+  }
+}

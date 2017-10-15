@@ -22,7 +22,7 @@ var gulp            = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
 var gulpWebpack     = require('webpack-stream');
 var named           = require('vinyl-named');
-// var browserSync     = require('browser-sync');
+var browserSync     = require('browser-sync');
 // var buffer          = require('vinyl-buffer');
 // var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
@@ -35,9 +35,9 @@ var fs              = require('fs');
 var srcPath     = './src/';
 var distPath    = './dist/';
 var modulesPath = './node_modules/';
+var jadePath    = './shared/jade/';
+var htmlPath    = distPath + 'html/';
 var scssPath    = srcPath + 'scss/';
-// var jadePath           = './shared/jade/';
-// var htmlPath           = './';
 // var styleGuidePath     = './styleguide/';
 // var imgPath            = './shared/img/';
 // var bsProxy            = false; // When you need proxy; write your own domain.
@@ -79,22 +79,22 @@ gulp.task('browser-sync', function() {
 // 5. JADE
 // - - - - - - - - - - - - - - -
 // Compile Jade to HTML
-// gulp.task('jade', function() {
-//   return gulp.src([jadePath + '**/!(_)*.jade'])
-//     .pipe(gulpLoadPlugins.data(function(file) {
-//       return require(jadePath + 'setting.json')
-//     }))
-//     .pipe(gulpLoadPlugins.plumber({
-//       errorHandler: handleErrors
-//     }))
-//     .pipe(gulpLoadPlugins.changed(htmlPath, {
-//       extension: '.html',
-//       hashChanged: gulpLoadPlugins.changed.compareSha1Digest
-//     }))
-//     .pipe(gulpLoadPlugins.jade({ pretty: true }))
-//     .pipe(gulp.dest(htmlPath))
-//     .pipe(browserSync.reload({ stream:true }));
-// });
+gulp.task('jade', function() {
+  return gulp.src([jadePath + '**/!(_)*.jade'])
+    .pipe(gulpLoadPlugins.data(function() {
+      return require(jadePath + 'setting.json')
+    }))
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.changed(htmlPath, {
+      extension: '.html',
+      hashChanged: gulpLoadPlugins.changed.compareSha1Digest
+    }))
+    .pipe(gulpLoadPlugins.jade({ pretty: true }))
+    .pipe(gulp.dest(htmlPath))
+    .pipe(browserSync.reload({ stream: true }));
+});
 
 
 // 6. STYLESHEET
@@ -120,7 +120,8 @@ gulp.task('sass', function() {
     }))
     .pipe(gulpLoadPlugins.csscomb())
     .pipe(gulpLoadPlugins.csslint())
-    .pipe(gulp.dest(distPath + 'css/'));
+    .pipe(gulp.dest(distPath + 'css/'))
+    .pipe(browserSync.reload({ stream: true }));
 });
 
 gulp.task('cssmin', function() {
@@ -275,11 +276,10 @@ gulp.task('build', function() {
 
 // Watch tasks
 gulp.task('watch', function() {
-
   // Watch Jade
-  // gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(e){
-  //   gulp.start('jade');
-  // });
+  gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(){
+    gulp.start('jade');
+  });
 
   // Watch Sprite
   // gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(e){
