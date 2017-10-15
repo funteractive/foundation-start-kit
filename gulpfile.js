@@ -25,41 +25,37 @@ var named           = require('vinyl-named');
 // var browserSync     = require('browser-sync');
 // var buffer          = require('vinyl-buffer');
 // var source          = require('vinyl-source-stream');
-// var runSequence     = require('run-sequence');
-// var fs              = require('fs');
+var runSequence     = require('run-sequence');
+var fs              = require('fs');
 // var pngquant        = require('imagemin-pngquant');
 // var watchify        = require('watchify');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
-var srcPath  = './src/';
-var distPath = './dist/';
+var srcPath     = './src/';
+var distPath    = './dist/';
+var modulesPath = './node_modules/';
+var scssPath    = srcPath + 'scss/';
 // var jadePath           = './shared/jade/';
 // var htmlPath           = './';
-var scssPath           = './shared/scss/';
-var cssPath            = './';
 // var styleGuidePath     = './styleguide/';
 // var imgPath            = './shared/img/';
-var jsPath             = './shared/js/';
-// var foundationScssPath = bowerPath + 'foundation-sites/scss/';
 // var bsProxy            = false; // When you need proxy; write your own domain.
 
 
 // 3. BUILD
 // - - - - - - - - - - - - - - -
 // Copy foundation files
-/*
 gulp.task('copy:foundation', function() {
   return gulp.src([
-    foundationScssPath + 'foundation.scss',
-    foundationScssPath + 'settings/_settings.scss'
+    modulesPath + 'foundation-sites/scss/foundation.scss',
+    modulesPath + 'foundation-sites/scss/settings/_settings.scss'
   ])
     .pipe(gulpLoadPlugins.rename({
       prefix: '_'
     }))
     .pipe(gulp.dest(scssPath + 'core/'));
 });
-*/
 
 
 // 4. SERVER
@@ -104,46 +100,45 @@ gulp.task('browser-sync', function() {
 // 6. STYLESHEET
 // - - - - - - - - - - - - - - -
 // Compile stylesheets with Ruby Sass
-// gulp.task('sass', function() {
-//   return gulpLoadPlugins.rubySass(scssPath + '**/*.scss', {
-//       loadPath: [
-//         bowerPath + 'foundation-sites/scss',
-//         bowerPath + 'fontawesome/scss'
-//       ],
-//       style: 'nested',
-//       bundleExec: false,
-//       require: 'sass-globbing',
-//       sourcemap: false
-//     })
-//     .pipe(gulpLoadPlugins.plumber({
-//       errorHandler: handleErrors
-//     }))
-//     .pipe(gulpLoadPlugins.pleeease({
-//       "autoprefixer": {"browsers": ["last 2 versions", "ie 10", "ie 9"]},
-//       "minifier": false
-//     }))
-//     .pipe(gulpLoadPlugins.csscomb())
-//     .pipe(gulpLoadPlugins.csslint())
-//     .pipe(gulp.dest(cssPath))
-//     .pipe( browserSync.reload( { stream:true } ) );
-// });
-//
-// gulp.task('cssmin', function() {
-//   gulp.src(cssPath + 'app.css')
-//     .pipe(gulpLoadPlugins.rename({
-//       suffix: '.min'
-//     }))
-//     .pipe(gulpLoadPlugins.csso())
-//     .pipe(gulp.dest(cssPath));
-// });
-//
-// gulp.task('css', function(callback) {
-//   return runSequence(
-//     'sass',
-//     'cssmin',
-//     callback
-//   );
-// });
+gulp.task('sass', function() {
+  return gulpLoadPlugins.rubySass(scssPath + '**/*.scss', {
+      loadPath: [
+        modulesPath + 'foundation-sites/scss',
+        modulesPath + 'font-awesome/scss'
+      ],
+      style: 'nested',
+      bundleExec: false,
+      require: 'sass-globbing',
+      sourcemap: false
+    })
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.pleeease({
+      'autoprefixer': { 'browsers': ['last 2 versions', 'ie 10', 'ie 9'] },
+      'minifier': false
+    }))
+    .pipe(gulpLoadPlugins.csscomb())
+    .pipe(gulpLoadPlugins.csslint())
+    .pipe(gulp.dest(distPath + 'css/'));
+});
+
+gulp.task('cssmin', function() {
+  gulp.src(distPath + 'css/*.css')
+    .pipe(gulpLoadPlugins.rename({
+      suffix: '.min'
+    }))
+    .pipe(gulpLoadPlugins.csso())
+    .pipe(gulp.dest(distPath + 'css/'));
+});
+
+gulp.task('css', function(callback) {
+  return runSequence(
+    'sass',
+    'cssmin',
+    callback
+  );
+});
 
 
 // 7. STYLE GUIDE
@@ -257,26 +252,26 @@ gulp.task('webpack', function() {
 // 11. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
 // Build the documentation once
-// gulp.task('build', ['bower'], function() {
-//   // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
-//   fs.open(scssPath + 'core/_foundation.scss', 'r', function(err, fd) {
-//     if (err) {
-//       fs.open(scssPath + 'core/_settings.scss', 'r', function(err, fd) {
-//         if (err) {
-//           runSequence('copy:foundation', function() {
-//             console.log('Successfully built.');
-//           });
-//         } else {
-//           console.log('"_settings.scss" is always exist!');
-//         }
-//         fd && fs.close(fd, function(err) { });
-//       });
-//     } else {
-//       console.log('"_foundation.scss" is always exist!');
-//     }
-//     fd && fs.close(fd, function(err) { });
-//   });
-// });
+gulp.task('build', function() {
+  // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
+  fs.open(scssPath + 'core/_foundation.scss', 'r', function(err, fd) {
+    if (err) {
+      fs.open(scssPath + 'core/_settings.scss', 'r', function(err, fd) {
+        if (err) {
+          runSequence('copy:foundation', function() {
+            console.log('Successfully built.');
+          });
+        } else {
+          console.log('"_settings.scss" is always exist!');
+        }
+        fd && fs.close(fd, function(err) { });
+      });
+    } else {
+      console.log('"_foundation.scss" is always exist!');
+    }
+    fd && fs.close(fd, function(err) { });
+  });
+});
 
 // Watch tasks
 gulp.task('watch', function() {
@@ -292,10 +287,9 @@ gulp.task('watch', function() {
   // });
 
   // Watch Sass
-  // gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(e){
-  //   gulp.start('sass');
-  // });
-
+  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(){
+    gulp.start('sass');
+  });
 });
 
 // Default tasks

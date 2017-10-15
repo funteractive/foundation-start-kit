@@ -18,9 +18,24 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
+    "fs": "^0.0.1-security",
     "gulp": "^3.9.1",
+    "gulp-csscomb": "^3.0.8",
+    "gulp-csslint": "^1.0.0",
+    "gulp-csso": "^3.0.0",
     "gulp-load-plugins": "^1.5.0",
+    "gulp-notify": "^3.0.0",
+    "gulp-pleeease": "^2.0.2",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^2.1.1",
+    "gulp-watch": "^4.3.11",
+    "run-sequence": "^2.2.0",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^4.0.0"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "foundation-sites": "^6.4.4-rc1"
   }
 }

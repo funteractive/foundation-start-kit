@@ -1,0 +1,52 @@
+@charset "utf-8";
+// Clearfix
+%group{
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+    font-size:0;
+  }
+}
+
+$fontSizeList: 62%, 70%, 77%, 85%, 93%, 100%, 108%, 116%, 124%, 131%, 139%, 147%, 154%, 162%, 170%, 177%, 185%, 193%, 200%, 208%, 216%, 224%, 231%, 239%, 247%, 254%, 262%, 270%, 277%, 285%, 293%, 300%, 308%;
+
+@function fz($size) {
+  @if $size < 8 {
+      $size: 8;
+  }
+  @if $size > 40 {
+      $size: 40;
+  }
+  @return nth($fontSizeList, $size - 7);
+}
+
+
+// Mixins for retina sprite
+@mixin r-sprite-width($sprite) {
+  width: nth($sprite, 5)/2;
+}
+
+@mixin r-sprite-height($sprite) {
+  height: nth($sprite, 6)/2;
+}
+
+@mixin r-sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3)/2;
+  $sprite-offset-y: nth($sprite, 4)/2;
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin r-sprite-size($sprite) {
+  background-size: nth($sprite, 7)/2 nth($sprite, 8)/2;
+}
+
+@mixin r-sprite($sprite) {
+  @include sprite-image($sprite);
+  @include r-sprite-position($sprite);
+  @include r-sprite-width($sprite);
+  @include r-sprite-height($sprite);
+  @include r-sprite-size($sprite);
+}
