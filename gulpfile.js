@@ -1,19 +1,18 @@
 'use strict';
 
-// Funteractive start up theme
+// FUNTERACTIVE start up theme
 //
 //
 // The tasks are grouped into these categories:
 //   1. Libraries
 //   2. Variables
-//   3. Build tasks
-//   4. Running server
-//   5. Jade
-//   6. Stylesheet
-//   7. Style guide
-//   8. Image
-//   9. JavaScript
-//  10. Linter
+//   3. Running server
+//   4. Jade
+//   5. Stylesheet
+//   6. Image
+//   7. JavaScript
+//   8. Linter
+//   9. Build
 //  10. Tasks
 
 // 1. LIBRARIES
@@ -40,22 +39,7 @@ var imgPath     = distPath + 'img/';
 var bsProxy     = false; // When you need proxy, set your own domain.
 
 
-// 3. BUILD
-// - - - - - - - - - - - - - - -
-// Copy foundation files
-gulp.task('copy:foundation', function() {
-  return gulp.src([
-    modulesPath + 'foundation-sites/scss/foundation.scss',
-    modulesPath + 'foundation-sites/scss/settings/_settings.scss'
-  ])
-    .pipe(gulpLoadPlugins.rename({
-      prefix: '_'
-    }))
-    .pipe(gulp.dest(scssPath + 'core/'));
-});
-
-
-// 4. SERVER
+// 3. SERVER
 // - - - - - - - - - - - - - - -
 // Run browser-sync
 gulp.task('browser-sync', function() {
@@ -72,7 +56,7 @@ gulp.task('browser-sync', function() {
 });
 
 
-// 5. JADE
+// 4. JADE
 // - - - - - - - - - - - - - - -
 // Compile Jade to HTML
 gulp.task('jade', function() {
@@ -93,7 +77,7 @@ gulp.task('jade', function() {
 });
 
 
-// 6. STYLESHEET
+// 5. STYLESHEET
 // - - - - - - - - - - - - - - -
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
@@ -129,16 +113,15 @@ gulp.task('cssmin', function() {
     .pipe(gulp.dest(distPath + 'css/'));
 });
 
-gulp.task('css', function(callback) {
+gulp.task('css', function() {
   return runSequence(
     'sass',
-    'cssmin',
-    callback
+    'cssmin'
   );
 });
 
 
-// 8. IMAGE
+// 6. IMAGE
 // - - - - - - - - - - - - - - -
 // make sprite image and css for sprite
 gulp.task('sprite', function() {
@@ -182,14 +165,14 @@ gulp.task('imagemin', function() {
 });
 
 
-// 9. JAVASCRIPT
+// 7. JAVASCRIPT
 // - - - - - - - - - - - - - - -
 // run webpack
 gulp.task('webpack', function() {
   return gulp.src(srcPath + 'js/app.js')
     .pipe(named())
     .pipe(gulpWebpack({
-      watch: false,
+      watch: true,
       module: {
         loaders: [
           {
@@ -207,23 +190,35 @@ gulp.task('webpack', function() {
     .pipe(gulp.dest(distPath + 'js/'));
 });
 
-// 10. LINTER
+// 8. LINTER
 // - - - - - - - - - - - - - - -
-// gulp.task('html-hint', function() {
-//   return gulp.src([htmlPath + '*.html', htmlPath + '**/*.html', '!node_modules/**/*.html'])
-//     .pipe(gulpLoadPlugins.htmlhint())
-//     .pipe(gulpLoadPlugins.htmlhint.failReporter())
-//     .pipe(gulpLoadPlugins.htmlhint.reporter());
-// });
-//
-// gulp.task('css-lint', function() {
-//   return gulp.src([cssPath + 'app.css'])
-//     .pipe(gulpLoadPlugins.csslint())
-//     .pipe(gulpLoadPlugins.csslint.reporter());
-// });
+gulp.task('html-hint', function() {
+  return gulp.src([htmlPath + '*.html', htmlPath + '**/*.html', '!node_modules/**/*.html'])
+    .pipe(gulpLoadPlugins.htmlhint())
+    .pipe(gulpLoadPlugins.htmlhint.failReporter())
+    .pipe(gulpLoadPlugins.htmlhint.reporter());
+});
 
-// 11. NOW BRING IT TOGETHER
+gulp.task('css-lint', function() {
+  return gulp.src([distPath + 'css/*.css'])
+    .pipe(gulpLoadPlugins.csslint())
+    .pipe(gulpLoadPlugins.csslint.reporter());
+});
+
+// 9. BUILD
 // - - - - - - - - - - - - - - -
+// Copy foundation files
+gulp.task('copy:foundation', function() {
+  return gulp.src([
+      modulesPath + 'foundation-sites/scss/foundation.scss',
+      modulesPath + 'foundation-sites/scss/settings/_settings.scss'
+    ])
+    .pipe(gulpLoadPlugins.rename({
+      prefix: '_'
+    }))
+    .pipe(gulp.dest(scssPath + 'core/'));
+});
+
 // Build the documentation once
 gulp.task('build', function() {
   // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
@@ -246,6 +241,9 @@ gulp.task('build', function() {
   });
 });
 
+
+// 10. TASKS
+// - - - - - - - - - - - - - - -
 // Watch tasks
 gulp.task('watch', function() {
   // Watch Jade
@@ -265,15 +263,16 @@ gulp.task('watch', function() {
 });
 
 // Default tasks
-gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
 
 // When before distribute, 'dist' task will be executed.
-gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
+gulp.task('dist', ['jade', 'css', 'webpack', 'sprite', 'imagemin']);
 
-gulp.task('lint', ['html-hint', 'css-lint', 'js-hint']);
+// Run linters.
+gulp.task('lint', ['html-hint', 'css-lint']);
 
 
-// 12. Functions
+// 11. Functions
 // - - - - - - - - - - - - - - -
 function handleErrors() {
   var args = Array.prototype.slice.call(arguments);
