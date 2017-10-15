@@ -23,11 +23,11 @@ var gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*
 var gulpWebpack     = require('webpack-stream');
 var named           = require('vinyl-named');
 var browserSync     = require('browser-sync');
-// var buffer          = require('vinyl-buffer');
+var buffer          = require('vinyl-buffer');
 // var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
-// var pngquant        = require('imagemin-pngquant');
+var pngquant        = require('imagemin-pngquant');
 // var watchify        = require('watchify');
 
 // 2. VARIABLES
@@ -35,11 +35,11 @@ var fs              = require('fs');
 var srcPath     = './src/';
 var distPath    = './dist/';
 var modulesPath = './node_modules/';
-var jadePath    = './shared/jade/';
+var jadePath    = srcPath + 'jade/';
 var htmlPath    = distPath + 'html/';
 var scssPath    = srcPath + 'scss/';
+var imgPath     = distPath + 'img/';
 // var styleGuidePath     = './styleguide/';
-// var imgPath            = './shared/img/';
 // var bsProxy            = false; // When you need proxy; write your own domain.
 
 
@@ -163,45 +163,45 @@ gulp.task('css', function(callback) {
 // 8. IMAGE
 // - - - - - - - - - - - - - - -
 // make sprite image and css for sprite
-// gulp.task('sprite', function() {
-//   var spriteData = gulp.src(imgPath + 'sprite/*.png')
-//     .pipe(gulpLoadPlugins.spritesmith({
-//       imgName: 'sprite.png',
-//       imgPath: imgPath + 'sprite.png',
-//       cssName: '_sprite.scss',
-//       cssTemplate: '.sprite-template',
-//       algorithm:'top-down',
-//       padding: 20,
-//       algorithmOpts : {
-//         sort: false
-//       }
-//     }));
-//
-//   // minify images
-//   spriteData.img
-//     .pipe(buffer())
-//     .pipe(gulpLoadPlugins.imagemin({
-//       progressive: true,
-//       use: [pngquant({quality: '70-80', speed: 1})]
-//     }))
-//     .pipe(gulp.dest(imgPath))
-//     .pipe(browserSync.reload({ stream:true }));
-//
-//   // compile scss
-//   spriteData.css
-//     .pipe(gulp.dest(scssPath + 'core/'))
-//     .pipe(browserSync.reload({ stream:true }));
-// });
-//
-// // optimize images
-// gulp.task('imagemin', function() {
-//   return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
-//     .pipe(gulpLoadPlugins.imagemin({
-//       progressive: true,
-//       use: [pngquant({quality: '70-80', speed: 1})]
-//     }))
-//     .pipe(gulp.dest(imgPath))
-// });
+gulp.task('sprite', function() {
+  var spriteData = gulp.src(srcPath + 'img/sprite/*.png')
+    .pipe(gulpLoadPlugins.spritesmith({
+      imgName: 'sprite.png',
+      imgPath: srcPath + 'img/sprite.png',
+      cssName: '_sprite.scss',
+      cssTemplate: '.sprite-template',
+      algorithm:'top-down',
+      padding: 20,
+      algorithmOpts : {
+        sort: false
+      }
+    }));
+
+  // minify images
+  spriteData.img
+    .pipe(buffer())
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({ quality: '70-80', speed: 1 })]
+    }))
+    .pipe(gulp.dest(imgPath))
+    .pipe(browserSync.reload({ stream: true }));
+
+  // compile scss
+  spriteData.css
+    .pipe(gulp.dest(scssPath + 'core/'))
+    .pipe(browserSync.reload({ stream: true }));
+});
+
+// optimize images
+gulp.task('imagemin', function() {
+  return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({ quality: '70-80', speed: 1 })]
+    }))
+    .pipe(gulp.dest(imgPath))
+});
 
 
 // 9. JAVASCRIPT
