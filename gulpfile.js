@@ -24,11 +24,9 @@ var gulpWebpack     = require('webpack-stream');
 var named           = require('vinyl-named');
 var browserSync     = require('browser-sync');
 var buffer          = require('vinyl-buffer');
-// var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
 var pngquant        = require('imagemin-pngquant');
-// var watchify        = require('watchify');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
@@ -39,7 +37,6 @@ var jadePath    = srcPath + 'jade/';
 var htmlPath    = distPath + 'html/';
 var scssPath    = srcPath + 'scss/';
 var imgPath     = distPath + 'img/';
-// var styleGuidePath     = './styleguide/';
 // var bsProxy            = false; // When you need proxy; write your own domain.
 
 
@@ -142,24 +139,6 @@ gulp.task('css', function(callback) {
 });
 
 
-// 7. STYLE GUIDE
-// - - - - - - - - - - - - - - -
-// Generate style guide with kss
-// gulp.task('styleguide', function() {
-//   // Copy css for style guide
-//   gulp.src(cssPath + 'style.css')
-//     .pipe(gulp.dest(styleGuidePath));
-//
-//   // Make style guide
-//   gulp.src([scssPath + '*.scss', scssPath + '**/*.scss'])
-//     .pipe(gulpLoadPlugins.kss({
-//       overview: styleGuidePath + 'styleguide.md',
-//       templateDirectory: styleGuidePath + 'template/'
-//     }))
-//     .pipe(gulp.dest(styleGuidePath));
-// });
-
-
 // 8. IMAGE
 // - - - - - - - - - - - - - - -
 // make sprite image and css for sprite
@@ -243,12 +222,6 @@ gulp.task('webpack', function() {
 //     .pipe(gulpLoadPlugins.csslint())
 //     .pipe(gulpLoadPlugins.csslint.reporter());
 // });
-//
-// gulp.task('js-hint', function() {
-//   return gulp.src([jsPath + 'src/*.js'])
-//     .pipe(gulpLoadPlugins.jshint())
-//     .pipe(gulpLoadPlugins.jshint.reporter('jshint-stylish'));
-// });
 
 // 11. NOW BRING IT TOGETHER
 // - - - - - - - - - - - - - - -
@@ -282,9 +255,9 @@ gulp.task('watch', function() {
   });
 
   // Watch Sprite
-  // gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(e){
-  //   gulp.start('sprite');
-  // });
+  gulpLoadPlugins.watch([srcPath + 'img/sprite/*.png'], function(){
+    gulp.start('sprite');
+  });
 
   // Watch Sass
   gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(){
@@ -302,7 +275,6 @@ gulp.task('lint', ['html-hint', 'css-lint', 'js-hint']);
 
 // 12. Functions
 // - - - - - - - - - - - - - - -
-// Error Handle
 function handleErrors() {
   var args = Array.prototype.slice.call(arguments);
   gulpLoadPlugins.notify.onError({
