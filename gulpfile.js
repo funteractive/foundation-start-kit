@@ -37,7 +37,7 @@ var jadePath    = srcPath + 'jade/';
 var htmlPath    = distPath + 'html/';
 var scssPath    = srcPath + 'scss/';
 var imgPath     = distPath + 'img/';
-// var bsProxy            = false; // When you need proxy; write your own domain.
+var bsProxy     = false; // When you need proxy, set your own domain.
 
 
 // 3. BUILD
@@ -58,9 +58,9 @@ gulp.task('copy:foundation', function() {
 // 4. SERVER
 // - - - - - - - - - - - - - - -
 // Run browser-sync
-/*
 gulp.task('browser-sync', function() {
   browserSync({
+    // remove server when you use proxy.
     server: {
       baseDir: './'
     },
@@ -70,7 +70,6 @@ gulp.task('browser-sync', function() {
     }
   });
 });
-*/
 
 
 // 5. JADE
@@ -272,6 +271,7 @@ gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
 gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
 
 gulp.task('lint', ['html-hint', 'css-lint', 'js-hint']);
+
 
 // 12. Functions
 // - - - - - - - - - - - - - - -
