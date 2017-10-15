@@ -1,4 +1,5 @@
 const hoge = 'hoge';
 const fuga = () => {
-  console.log('fuga');
-}
+  console.log(hoge);
+};
+fuga();

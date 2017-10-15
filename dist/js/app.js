@@ -79,8 +79,9 @@ module.exports = __webpack_require__(1);
 
 var hoge = 'hoge';
 var fuga = function fuga() {
-  console.log('fuga');
+  console.log(hoge);
 };
+fuga();
 
 /***/ })
 /******/ ]);
