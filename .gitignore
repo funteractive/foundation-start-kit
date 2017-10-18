@@ -1,10 +1,9 @@
 .DS_Store
-docs/*
 node_modules/
 bower_components/
-.idea/
+.idea
 .sublime-*.*
-.sass-cache/
+.sass-cache
 *.swp
 *.un~
 *.log

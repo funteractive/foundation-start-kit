@@ -1,77 +1,50 @@
 'use strict';
 
-// Funteractive start up theme
+// FUNTERACTIVE start up theme
 //
 //
 // The tasks are grouped into these categories:
 //   1. Libraries
 //   2. Variables
-//   3. Build tasks
-//   4. Running server
-//   5. Jade
-//   6. Stylesheet
-//   7. Style guide
-//   8. Image
-//   9. JavaScript
-//  10. Linter
+//   3. Running server
+//   4. Jade
+//   5. Stylesheet
+//   6. Image
+//   7. JavaScript
+//   8. Linter
+//   9. Build
 //  10. Tasks
 
 // 1. LIBRARIES
 // - - - - - - - - - - - - - - -
-
 var gulp            = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
+var gulpWebpack     = require('webpack-stream');
+var named           = require('vinyl-named');
 var browserSync     = require('browser-sync');
-var browserify      = require('browserify');
 var buffer          = require('vinyl-buffer');
-var source          = require('vinyl-source-stream');
 var runSequence     = require('run-sequence');
 var fs              = require('fs');
 var pngquant        = require('imagemin-pngquant');
-var watchify        = require('watchify');
 
 // 2. VARIABLES
 // - - - - - - - - - - - - - - -
-var jadePath           = './shared/jade/';
-var htmlPath           = './';
-var scssPath           = './shared/scss/';
-var cssPath            = './';
-var styleGuidePath     = './styleguide/';
-var imgPath            = './shared/img/';
-var jsPath             = './shared/js/';
-var bowerPath          = './bower_components/';
-var foundationScssPath = bowerPath + 'foundation-sites/scss/';
-var bsProxy            = false; // When you need proxy; write your own domain.
+var srcPath     = './src/';
+var distPath    = './dist/';
+var modulesPath = './node_modules/';
+var jadePath    = srcPath + 'jade/';
+var htmlPath    = distPath + 'html/';
+var scssPath    = srcPath + 'scss/';
+var imgPath     = distPath + 'img/';
+var bsProxy     = false; // When you need proxy, set your own domain.
 
 
-// 3. BUILD
+// 3. SERVER
 // - - - - - - - - - - - - - - -
-
-// Install libraries with Bower
-gulp.task('bower', function() {
-  return gulpLoadPlugins.bower()
-    .pipe(gulp.dest(bowerPath));
-});
-
-// Copy foundation files
-gulp.task('copy:foundation', function() {
-  return gulp.src([
-    foundationScssPath + 'foundation.scss',
-    foundationScssPath + 'settings/_settings.scss'
-  ])
-    .pipe(gulpLoadPlugins.rename({
-      prefix: '_'
-    }))
-    .pipe(gulp.dest(scssPath + 'core/'));
-});
-
-
-// 4. SERVER
-// - - - - - - - - - - - - - - -
-
 // Run browser-sync
 gulp.task('browser-sync', function() {
   browserSync({
+    // remove server when you use proxy.
     server: {
       baseDir: './'
     },
@@ -83,13 +56,12 @@ gulp.task('browser-sync', function() {
 });
 
 
-// 5. JADE
+// 4. JADE
 // - - - - - - - - - - - - - - -
-
 // Compile Jade to HTML
 gulp.task('jade', function() {
   return gulp.src([jadePath + '**/!(_)*.jade'])
-    .pipe(gulpLoadPlugins.data(function(file) {
+    .pipe(gulpLoadPlugins.data(function() {
       return require(jadePath + 'setting.json')
     }))
     .pipe(gulpLoadPlugins.plumber({
@@ -101,19 +73,18 @@ gulp.task('jade', function() {
     }))
     .pipe(gulpLoadPlugins.jade({ pretty: true }))
     .pipe(gulp.dest(htmlPath))
-    .pipe(browserSync.reload({ stream:true }));
+    .pipe(browserSync.reload({ stream: true }));
 });
 
 
-// 6. STYLESHEET
+// 5. STYLESHEET
 // - - - - - - - - - - - - - - -
-
 // Compile stylesheets with Ruby Sass
 gulp.task('sass', function() {
   return gulpLoadPlugins.rubySass(scssPath + '**/*.scss', {
       loadPath: [
-        bowerPath + 'foundation-sites/scss',
-        bowerPath + 'fontawesome/scss'
+        modulesPath + 'foundation-sites/scss',
+        modulesPath + 'font-awesome/scss'
       ],
       style: 'nested',
       bundleExec: false,
@@ -124,61 +95,40 @@ gulp.task('sass', function() {
       errorHandler: handleErrors
     }))
     .pipe(gulpLoadPlugins.pleeease({
-      "autoprefixer": {"browsers": ["last 2 versions", "ie 10", "ie 9"]},
-      "minifier": false
+      'autoprefixer': { 'browsers': ['last 2 versions', 'ie 10', 'ie 9'] },
+      'minifier': false
     }))
     .pipe(gulpLoadPlugins.csscomb())
     .pipe(gulpLoadPlugins.csslint())
-    .pipe(gulp.dest(cssPath))
-    .pipe( browserSync.reload( { stream:true } ) );
+    .pipe(gulp.dest(distPath + 'css/'))
+    .pipe(browserSync.reload({ stream: true }));
 });
 
 gulp.task('cssmin', function() {
-  gulp.src(cssPath + 'app.css')
+  gulp.src(distPath + 'css/*.css')
     .pipe(gulpLoadPlugins.rename({
       suffix: '.min'
     }))
     .pipe(gulpLoadPlugins.csso())
-    .pipe(gulp.dest(cssPath));
-})
+    .pipe(gulp.dest(distPath + 'css/'));
+});
 
-gulp.task('css', function(callback) {
+gulp.task('css', function() {
   return runSequence(
     'sass',
-    'cssmin',
-    callback
+    'cssmin'
   );
 });
 
 
-// 7. STYLE GUIDE
+// 6. IMAGE
 // - - - - - - - - - - - - - - -
-
-// Generate style guide with kss
-gulp.task('styleguide', function() {
-  // Copy css for style guide
-  gulp.src(cssPath + 'style.css')
-    .pipe(gulp.dest(styleGuidePath));
-
-  // Make style guide
-  gulp.src([scssPath + '*.scss', scssPath + '**/*.scss'])
-    .pipe(gulpLoadPlugins.kss({
-      overview: styleGuidePath + 'styleguide.md',
-      templateDirectory: styleGuidePath + 'template/'
-    }))
-    .pipe(gulp.dest(styleGuidePath));
-});
-
-
-// 8. IMAGE
-// - - - - - - - - - - - - - - -
-
 // make sprite image and css for sprite
 gulp.task('sprite', function() {
-  var spriteData = gulp.src(imgPath + 'sprite/*.png')
+  var spriteData = gulp.src(srcPath + 'img/sprite/*.png')
     .pipe(gulpLoadPlugins.spritesmith({
       imgName: 'sprite.png',
-      imgPath: imgPath + 'sprite.png',
+      imgPath: srcPath + 'img/sprite.png',
       cssName: '_sprite.scss',
       cssTemplate: '.sprite-template',
       algorithm:'top-down',
@@ -193,15 +143,15 @@ gulp.task('sprite', function() {
     .pipe(buffer())
     .pipe(gulpLoadPlugins.imagemin({
       progressive: true,
-      use: [pngquant({quality: '70-80', speed: 1})]
+      use: [pngquant({ quality: '70-80', speed: 1 })]
     }))
     .pipe(gulp.dest(imgPath))
-    .pipe(browserSync.reload({ stream:true }));
+    .pipe(browserSync.reload({ stream: true }));
 
   // compile scss
   spriteData.css
     .pipe(gulp.dest(scssPath + 'core/'))
-    .pipe(browserSync.reload({ stream:true }));
+    .pipe(browserSync.reload({ stream: true }));
 });
 
 // optimize images
@@ -209,24 +159,38 @@ gulp.task('imagemin', function() {
   return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)')
     .pipe(gulpLoadPlugins.imagemin({
       progressive: true,
-      use: [pngquant({quality: '70-80', speed: 1})]
+      use: [pngquant({ quality: '70-80', speed: 1 })]
     }))
     .pipe(gulp.dest(imgPath))
 });
 
 
-// 9. JAVASCRIPT
+// 7. JAVASCRIPT
 // - - - - - - - - - - - - - - -
-// browserify
-gulp.task('browserify', function() {
-  return buildScript( false );
-});
-// watchify
-gulp.task('watchify', function() {
-  return buildScript( true );
+// run webpack
+gulp.task('webpack', function() {
+  return gulp.src(srcPath + 'js/app.js')
+    .pipe(named())
+    .pipe(gulpWebpack({
+      watch: true,
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loaders: [
+              'babel-loader',
+              'eslint-loader'
+            ]
+          }
+        ]
+      },
+      devtool: 'source-map'
+    }))
+    .pipe(gulp.dest(distPath + 'js/'));
 });
 
-// 10. LINTER
+// 8. LINTER
 // - - - - - - - - - - - - - - -
 gulp.task('html-hint', function() {
   return gulp.src([htmlPath + '*.html', htmlPath + '**/*.html', '!node_modules/**/*.html'])
@@ -236,22 +200,27 @@ gulp.task('html-hint', function() {
 });
 
 gulp.task('css-lint', function() {
-  return gulp.src([cssPath + 'app.css'])
+  return gulp.src([distPath + 'css/*.css'])
     .pipe(gulpLoadPlugins.csslint())
     .pipe(gulpLoadPlugins.csslint.reporter());
 });
 
-gulp.task('js-hint', function() {
-  return gulp.src([jsPath + 'src/*.js'])
-    .pipe(gulpLoadPlugins.jshint())
-    .pipe(gulpLoadPlugins.jshint.reporter('jshint-stylish'));
+// 9. BUILD
+// - - - - - - - - - - - - - - -
+// Copy foundation files
+gulp.task('copy:foundation', function() {
+  return gulp.src([
+      modulesPath + 'foundation-sites/scss/foundation.scss',
+      modulesPath + 'foundation-sites/scss/settings/_settings.scss'
+    ])
+    .pipe(gulpLoadPlugins.rename({
+      prefix: '_'
+    }))
+    .pipe(gulp.dest(scssPath + 'core/'));
 });
 
-// 11. NOW BRING IT TOGETHER
-// - - - - - - - - - - - - - - -
-
 // Build the documentation once
-gulp.task('build', ['bower'], function() {
+gulp.task('build', function() {
   // If either file exists '_foundation.scss' or '_settings.scss', don't run the build task.
   fs.open(scssPath + 'core/_foundation.scss', 'r', function(err, fd) {
     if (err) {
@@ -272,37 +241,39 @@ gulp.task('build', ['bower'], function() {
   });
 });
 
+
+// 10. TASKS
+// - - - - - - - - - - - - - - -
 // Watch tasks
 gulp.task('watch', function() {
-
   // Watch Jade
-  gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(e){
+  gulpLoadPlugins.watch([jadePath + '*', jadePath + '**/*'], function(){
     gulp.start('jade');
   });
 
   // Watch Sprite
-  gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(e){
+  gulpLoadPlugins.watch([srcPath + 'img/sprite/*.png'], function(){
     gulp.start('sprite');
   });
 
   // Watch Sass
-  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(e){
+  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(){
     gulp.start('sass');
   });
-
 });
 
 // Default tasks
-gulp.task('default', ['browser-sync', 'sprite', 'watch', 'watchify'] );
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
 
 // When before distribute, 'dist' task will be executed.
-gulp.task('dist', ['jade', 'css', 'browserify', 'sprite', 'imagemin']);
+gulp.task('dist', ['jade', 'css', 'webpack', 'sprite', 'imagemin']);
 
-gulp.task('lint', ['html-hint', 'css-lint', 'js-hint']);
+// Run linters.
+gulp.task('lint', ['html-hint', 'css-lint']);
 
-// 12. Functions
+
+// 11. Functions
 // - - - - - - - - - - - - - - -
-// Error Handle
 function handleErrors() {
   var args = Array.prototype.slice.call(arguments);
   gulpLoadPlugins.notify.onError({
@@ -310,35 +281,4 @@ function handleErrors() {
     message: '<%= error.message %>'
   }).apply(this, args);
   this.emit('end');
-}
-// watchfiy build script
-function buildScript( watch ) {
-  var props = {
-    entries: [ jsPath + 'src/app.js']
-  };
-  var bundler;
-  if ( watch ) {
-    bundler = watchify( browserify( props ) );
-  } else{
-    bundler = browserify( props );
-  }
-  function rebundle() {
-    return bundler
-      .bundle()
-      .on( 'error', handleErrors )
-      .on( 'end', function() { gulpLoadPlugins.util.log("browserify compile success."); } )
-      .pipe( source( 'build.js' ) )
-      .pipe( buffer() )
-      .pipe( gulpLoadPlugins.uglify() )
-      .pipe( gulp.dest( jsPath ) )
-      .pipe( browserSync.reload( { stream:true } ) );
-  }
-  bundler.on('update', function() {
-    rebundle();
-    gulpLoadPlugins.util.log('update javascript...');
-  });
-  bundler.on('log', function(message) {
-    gulpLoadPlugins.util.log(message);
-  });
-  return rebundle();
 }
